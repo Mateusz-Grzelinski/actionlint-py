@@ -23,10 +23,10 @@ See [pre-commit] for instructions
 Sample `.pre-commit-config.yaml`:
 
 ```yaml
--   repo: # todo
-    rev: v1.6.22
-    hooks:
-    -   id: actionlint
+- repo: https://github.com/Mateusz-Grzelinski/actionlint-py
+  rev: v1.6.22
+  hooks:
+  - id: actionlint
 ```
 
 [actionlint]: https://github.com/rhysd/actionlint
