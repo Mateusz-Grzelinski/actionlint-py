@@ -1,23 +1,20 @@
-[![build status](https://github.com/shellcheck-py/shellcheck-py/actions/workflows/main.yml/badge.svg)](https://github.com/shellcheck-py/shellcheck-py/actions/workflows/main.yml)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/shellcheck-py/shellcheck-py/main.svg)](https://results.pre-commit.ci/latest/github/shellcheck-py/shellcheck-py/main)
+# actionlint-py
 
-# shellcheck-py
-
-A python wrapper to provide a pip-installable [shellcheck] binary.
+A python wrapper to provide a pip-installable [actionlint] binary.
 
 Internally this package provides a convenient way to download the pre-built
-shellcheck binary for your particular platform.
+actionlint binary for your particular platform.
 
 ### installation
 
 ```bash
-pip install shellcheck-py
+pip install actionlint-py
 ```
 
 ### usage
 
-After installation, the `shellcheck` binary should be available in your
-environment (or `shellcheck.exe` on windows).
+After installation, the `actionlint` binary should be available in your
+environment (or `actionlint.exe` on windows).
 
 ### As a pre-commit hook
 
@@ -26,11 +23,11 @@ See [pre-commit] for instructions
 Sample `.pre-commit-config.yaml`:
 
 ```yaml
--   repo: https://github.com/shellcheck-py/shellcheck-py
-    rev: v0.9.0.2
+-   repo: # todo
+    rev: v1.6.22
     hooks:
-    -   id: shellcheck
+    -   id: actionlint
 ```
 
-[shellcheck]: https://shellcheck.net
+[actionlint]: https://github.com/rhysd/actionlint
 [pre-commit]: https://pre-commit.com

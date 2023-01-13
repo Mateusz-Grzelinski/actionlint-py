@@ -17,40 +17,32 @@ from distutils.core import Command
 from setuptools import setup
 from setuptools.command.install import install as orig_install
 
-SHELLCHECK_VERSION = '0.9.0'
+ACTIONLINT_VERSION = '1.6.22'
 POSTFIX_SHA256 = {
-    ('linux', 'armv6hf'): (
-        'linux.armv6hf.tar.xz',
-        '03deed9ded9dd66434ccf9649815bcde7d275d6c9f6dcf665b83391673512c75',
-    ),
-    ('linux', 'aarch64'): (
-        'linux.aarch64.tar.xz',
-        '179c579ef3481317d130adebede74a34dbbc2df961a70916dd4039ebf0735fae',
-    ),
     ('linux', 'x86_64'): (
-        'linux.x86_64.tar.xz',
-        '700324c6dd0ebea0117591c6cc9d7350d9c7c5c287acbad7630fa17b1d4d9e2f',
+        '_linux_amd64.tar.gz',
+        '7d7a3061b59718728788e75e6a177c621a31a683ffd21fedeabc1296fc2ee289',
     ),
     ('darwin', 'x86_64'): (
-        'darwin.x86_64.tar.xz',
-        '7d3730694707605d6e60cec4efcb79a0632d61babc035aa16cda1b897536acf5',
+        '_darwin_amd64.tar.gz',
+        '6a1a522521e2fa0351328c439a63fc1c51611d45fc8156af15ad8690165f27c3',
     ),
     ('win32', 'AMD64'): (
-        'zip',
-        'ae58191b1ea4ffd9e5b15da9134146e636440302ce3e2f46863e8d71c8be1bbb',
+        '_windows_amd64.zip',
+        'c0007e418e6cd2008769e55666229b50677f85975676c4246baee5ec3ae9a2b5',
     ),
 }
 POSTFIX_SHA256[('cygwin', 'x86_64')] = POSTFIX_SHA256[('win32', 'AMD64')]
-POSTFIX_SHA256[('darwin', 'arm64')] = POSTFIX_SHA256[('darwin', 'x86_64')]
-POSTFIX_SHA256[('linux', 'armv7l')] = POSTFIX_SHA256[('linux', 'armv6hf')]
+POSTFIX_SHA256[('darwin', 'x86_64')] = POSTFIX_SHA256[('darwin', 'x86_64')]
+POSTFIX_SHA256[('linux', 'x86_64')] = POSTFIX_SHA256[('linux', 'x86_64')]
 PY_VERSION = '2'
 
 
 def get_download_url() -> tuple[str, str]:
     postfix, sha256 = POSTFIX_SHA256[(sys.platform, platform.machine())]
     url = (
-        f'https://github.com/koalaman/shellcheck/releases/download/'
-        f'v{SHELLCHECK_VERSION}/shellcheck-v{SHELLCHECK_VERSION}.{postfix}'
+        f'https://github.com/rhysd/actionlint/releases/download/'
+        f'v{ACTIONLINT_VERSION}/actionlint_{ACTIONLINT_VERSION}{postfix}'
     )
     return url, sha256
 
@@ -74,7 +66,7 @@ def extract(url: str, data: bytes) -> bytes:
         if '.tar.' in url:
             with tarfile.open(fileobj=bio) as tarf:
                 for info in tarf.getmembers():
-                    if info.isfile() and info.name.endswith('shellcheck'):
+                    if info.isfile() and info.name.endswith('actionlint'):
                         return tarf.extractfile(info).read()
         elif url.endswith('.zip'):
             with zipfile.ZipFile(bio) as zipf:
@@ -86,7 +78,7 @@ def extract(url: str, data: bytes) -> bytes:
 
 
 def save_executable(data: bytes, base_dir: str):
-    exe = 'shellcheck' if sys.platform != 'win32' else 'shellcheck.exe'
+    exe = 'actionlint' if sys.platform != 'win32' else 'actionlint.exe'
     output_path = os.path.join(base_dir, exe)
     os.makedirs(base_dir)
 
@@ -105,7 +97,7 @@ class build(orig_build):
 
 
 class install(orig_install):
-    sub_commands = orig_install.sub_commands + [('install_shellcheck', None)]
+    sub_commands = orig_install.sub_commands + [('install_actionlint', None)]
 
 
 class fetch_binaries(Command):
@@ -125,8 +117,8 @@ class fetch_binaries(Command):
         save_executable(data, self.build_temp)
 
 
-class install_shellcheck(Command):
-    description = 'install the shellcheck executable'
+class install_actionlint(Command):
+    description = 'install the actionlint executable'
     outfiles = ()
     build_dir = install_dir = None
 
@@ -149,7 +141,7 @@ class install_shellcheck(Command):
 
 command_overrides = {
     'install': install,
-    'install_shellcheck': install_shellcheck,
+    'install_actionlint': install_actionlint,
     'build': build,
     'fetch_binaries': fetch_binaries,
 }
@@ -173,4 +165,4 @@ else:
 
     command_overrides['bdist_wheel'] = bdist_wheel
 
-setup(version=f'{SHELLCHECK_VERSION}.{PY_VERSION}', cmdclass=command_overrides)
+setup(version=f'{ACTIONLINT_VERSION}.{PY_VERSION}', cmdclass=command_overrides)

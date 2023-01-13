@@ -1,7 +1,7 @@
-- id: shellcheck
-  name: shellcheck
-  description: Test shell scripts with shellcheck
-  entry: shellcheck
+- id: actionlint
+  name: actionlint
+  description: Test shell scripts with actionlint
+  entry: actionlint
   language: python
-  types: [shell]
-  require_serial: true # shellcheck can detect sourcing this way
+  types: [ "yaml" ]
+  files: "^.github/workflows/"
