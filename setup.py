@@ -17,7 +17,6 @@ from distutils.core import Command
 from setuptools import setup
 from setuptools.command.install import install as orig_install
 
-ACTIONLINT_VERSION = '1.6.22'
 POSTFIX_SHA256 = {
     ('linux', 'x86_64'): (
         '_linux_amd64.tar.gz',
@@ -165,4 +164,6 @@ else:
 
     command_overrides['bdist_wheel'] = bdist_wheel
 
-setup(version=f'{ACTIONLINT_VERSION}.{PY_VERSION}', cmdclass=command_overrides)
+setup(
+    # version=f'{ACTIONLINT_VERSION}.{PY_VERSION}',
+    cmdclass=command_overrides)
