@@ -146,7 +146,6 @@ command_overrides = {
     'fetch_binaries': fetch_binaries,
 }
 
-
 try:
     from wheel.bdist_wheel import bdist_wheel as orig_bdist_wheel
 except ImportError:
@@ -162,6 +161,7 @@ else:
             _, _, plat = orig_bdist_wheel.get_tag(self)
             # We don't contain any python source, nor any python extensions
             return 'py2.py3', 'none', plat
+
 
     command_overrides['bdist_wheel'] = bdist_wheel
 
