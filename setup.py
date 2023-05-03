@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import configparser
 import hashlib
 import http
 import io
@@ -17,20 +18,16 @@ from distutils.core import Command
 from setuptools import setup
 from setuptools.command.install import install as orig_install
 
-ACTIONLINT_VERSION = '1.6.22'
+conf = configparser.ConfigParser()
+conf.read('./setup.cfg')
+
+# with open("setup.cfg") as configfile:
+
+ACTIONLINT_VERSION = conf['files-to-download']['tag']
 POSTFIX_SHA256 = {
-    ('linux', 'x86_64'): (
-        '_linux_amd64.tar.gz',
-        '7d7a3061b59718728788e75e6a177c621a31a683ffd21fedeabc1296fc2ee289',
-    ),
-    ('darwin', 'x86_64'): (
-        '_darwin_amd64.tar.gz',
-        '6a1a522521e2fa0351328c439a63fc1c51611d45fc8156af15ad8690165f27c3',
-    ),
-    ('win32', 'AMD64'): (
-        '_windows_amd64.zip',
-        'c0007e418e6cd2008769e55666229b50677f85975676c4246baee5ec3ae9a2b5',
-    ),
+    ('linux', 'x86_64'): '_linux_amd64.tar.gz',
+    ('darwin', 'x86_64'): '_darwin_amd64.tar.gz',
+    ('win32', 'AMD64'): '_windows_amd64.zip',
 }
 POSTFIX_SHA256[('cygwin', 'x86_64')] = POSTFIX_SHA256[('win32', 'AMD64')]
 POSTFIX_SHA256[('darwin', 'x86_64')] = POSTFIX_SHA256[('darwin', 'x86_64')]
@@ -39,7 +36,8 @@ PY_VERSION = '2'
 
 
 def get_download_url() -> tuple[str, str]:
-    postfix, sha256 = POSTFIX_SHA256[(sys.platform, platform.machine())]
+    postfix = POSTFIX_SHA256[(sys.platform, platform.machine())]
+    sha256 = conf['files-to-download'][postfix]
     url = (
         f'https://github.com/rhysd/actionlint/releases/download/'
         f'v{ACTIONLINT_VERSION}/actionlint_{ACTIONLINT_VERSION}{postfix}'
@@ -162,7 +160,7 @@ else:
             # We don't contain any python source, nor any python extensions
             return 'py2.py3', 'none', plat
 
-
     command_overrides['bdist_wheel'] = bdist_wheel
 
-setup(version=f'{ACTIONLINT_VERSION}.{PY_VERSION}', cmdclass=command_overrides)
+if __name__ == '__main__':
+    setup(version=f'{ACTIONLINT_VERSION}.{PY_VERSION}', cmdclass=command_overrides)
