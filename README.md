@@ -29,5 +29,22 @@ Sample `.pre-commit-config.yaml`:
   - id: actionlint
 ```
 
+or to avoid going twice to internet (might help with proxy):
+
+```yaml
+- repo: local
+  hooks:
+    - id: actionlint
+      name: actionlint
+      description: Test yaml scripts with actionlint
+#      additional_dependencies: [actionlint-py==1.6.22.2] # safer, but pre-commit autoupdate will not work
+      additional_dependencies: [actionlint-py]
+      entry: actionlint
+#      args: [-ignore "*.set-output. was depracated.*"]
+      language: python
+      types: [ "yaml" ]
+      files: "^.github/workflows/"
+```
+
 [actionlint]: https://github.com/rhysd/actionlint
 [pre-commit]: https://pre-commit.com
