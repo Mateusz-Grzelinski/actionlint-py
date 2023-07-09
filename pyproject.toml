@@ -1,10 +1,10 @@
 [build-system]
 requires = ["setuptools>=61.0.0", "wheel", "requests", "semver"]
-build-backend = "setuptools.build_meta"
+build-backend = "setuptools.build_meta:__legacy__"
 
 [project]
 name = "actionlint_py"
-version = "1.6.25" # todo make dynamic?
+dynamic = ["version"]
 
 [options]
 python_requires = ">=3.7"
