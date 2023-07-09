@@ -14,10 +14,10 @@ requires-python = ">=3.7"
 license = { file = "LICENSE" }
 authors = [
     { name = "Ryan Rhee", email = "pypi@rhee.io" },
-    { name = "Mateusz Grzeliński", email = "czubaka111@gmail.com" },
+    { name = "Mateusz Grzeliński", email = "grzelinskimat@gmail.com" },
 ]
 maintainers = [
-    { name = "Mateusz Grzeliński", email = "czubaka111@gmail.com" }
+    { name = "Mateusz Grzeliński", email = "grzelinskimat@gmail.com" }
 ]
 classifiers = [
     "License :: OSI Approved :: MIT License",
