@@ -28,8 +28,9 @@ Can not remember what this does:
 
 Build and check:
 
-```
-python .\setup.py sdist bdist_wheel
+```shell
+# python .\setup.py sdist bdist_wheel # deprecated
+python -m build
 python -m twine check .\dist\*
 ```
 
