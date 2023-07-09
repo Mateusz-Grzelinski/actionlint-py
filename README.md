@@ -24,7 +24,7 @@ Sample `.pre-commit-config.yaml`:
 
 ```yaml
 - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
-  rev: v1.6.22
+  rev: v1.6.25
   hooks:
     - id: actionlint
 ```
