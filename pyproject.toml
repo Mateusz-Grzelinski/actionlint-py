@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel", "requests", "semver"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[project]
+name = "actionlint_py"
+dynamic = ["version"]
+
+[options]
+python_requires = ">=3.7"
+description = "Python wrapper around invoking actionlint (https://github.com/rhysd/actionlint)"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Ryan Rhee", email = "pypi@rhee.io" },
+    { name = "Mateusz Grzeliński", email = "grzelinskimat@gmail.com" },
+]
+maintainers = [
+    { name = "Mateusz Grzeliński", email = "grzelinskimat@gmail.com" }
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Intended Audience :: Developers",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["black"]
+
+[project.urls]
+"Homepage" = "https://github.com/Mateusz-Grzelinski/actionlint-py"
+"Bug Reports" = "https://github.com/Mateusz-Grzelinski/actionlint-py/issues"
+
+#[project.scripts]
+#hello = "hello:main"
+
+#[tool.setuptools]
+#package-data = { "sample" = ["*.dat"] }
+
+[tool.black]
+line-length = 120
