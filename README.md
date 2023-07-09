@@ -5,13 +5,13 @@ A python wrapper to provide a pip-installable [actionlint] binary.
 Internally this package provides a convenient way to download the pre-built
 actionlint binary for your particular platform.
 
-### installation
+### Installation
 
 ```bash
 pip install actionlint-py
 ```
 
-### usage
+### Usage
 
 After installation, the `actionlint` binary should be available in your
 environment (or `actionlint.exe` on windows).
@@ -26,7 +26,7 @@ Sample `.pre-commit-config.yaml`:
 - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
   rev: v1.6.22
   hooks:
-  - id: actionlint
+    - id: actionlint
 ```
 
 or to avoid going twice to internet (might help with proxy):
@@ -37,14 +37,19 @@ or to avoid going twice to internet (might help with proxy):
     - id: actionlint
       name: actionlint
       description: Test yaml scripts with actionlint
-#      additional_dependencies: [actionlint-py==1.6.22.2] # safer, but pre-commit autoupdate will not work
-      additional_dependencies: [actionlint-py]
+      #      additional_dependencies: [actionlint-py==1.6.22.2] # safer, but pre-commit autoupdate will not work
+      additional_dependencies: [ actionlint-py ]
       entry: actionlint
-#      args: [-ignore "*.set-output. was depracated.*"]
+      #      args: [-ignore "*.set-output. was depracated.*"]
       language: python
       types: [ "yaml" ]
       files: "^.github/workflows/"
 ```
 
 [actionlint]: https://github.com/rhysd/actionlint
+
 [pre-commit]: https://pre-commit.com
+
+# Development
+
+Development of wrapper and releasing new version: see [README-DEV.md](README-DEV.md)
