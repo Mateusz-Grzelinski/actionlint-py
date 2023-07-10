@@ -1,6 +1,11 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
   workflow_dispatch:
   workflow_call:
 jobs:
@@ -21,7 +26,9 @@ jobs:
 
       - run: python -m build
 
-      - run: python -m twine check dist/*
+      - run: |
+          echo "# Twine check" >> $GITHUB_STEP_SUMMARY
+          python -m twine check dist/* >> $GITHUB_STEP_SUMMARY
         continue-on-error: true
 
       - name: Upload package distributions
@@ -33,7 +40,7 @@ jobs:
   publish-to-test:
     needs: build
     runs-on: ubuntu-latest
-#    if: "github.ref_type == 'tag'"
+    if: "github.ref_type == 'tag'"
     environment:
       name: TestPyPI
     permissions:
@@ -49,5 +56,6 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          # using trusted publisher, no need for token
+#          user: __token__
+#          password: ${{ secrets.PYPI_API_TOKEN }}
