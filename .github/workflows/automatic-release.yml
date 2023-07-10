@@ -29,7 +29,6 @@ jobs:
       - run: |
           echo "# Twine check" >> $GITHUB_STEP_SUMMARY
           python -m twine check dist/* >> $GITHUB_STEP_SUMMARY
-        continue-on-error: true
 
       - name: Upload package distributions
         uses: actions/upload-artifact@v3
@@ -51,6 +50,14 @@ jobs:
         with:
           name: build
           path: dist/
+      - name: Set up Python
+        id: set-up-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - run: |
+          python -m pip install --upgrade pip
+          pip install twine
       # using trusted publisher, no need for token
       # bug workaround:
       # WARNING  Error during upload. Retry with the --verbose option for more details.
