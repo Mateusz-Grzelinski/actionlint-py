@@ -9,6 +9,8 @@ on:
 jobs:
   check-for-update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -31,3 +33,5 @@ jobs:
 #          tagging_message: 'v${{ steps.check-version.outputs.version }}'
   call-release:
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/automatic-release.yml@release-action
+    permissions:
+      id-token: write
