@@ -39,10 +39,10 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: New release ${{ steps.check-version.outputs.version }}
-#          tagging_message: 'v${{ steps.check-version.outputs.version }}'
+          tagging_message: v${{ steps.check-version.outputs.version }}
   call-release:
     needs: check-for-update
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/automatic-release.yml@release-action
-    if: "needs.check-for-update.outputs.update_required == true"
+    if: needs.check-for-update.outputs.update_required == 'true'
     permissions:
       id-token: write
