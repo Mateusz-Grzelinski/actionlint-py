@@ -10,8 +10,10 @@ import requests
 import semver
 from requests_html import HTMLSession
 
+VERSION = os.path.join(os.path.dirname(__file__), 'VERSION.txt')
+
 ACTIONLINT_RELEASES = 'https://github.com/rhysd/actionlint/releases/'
-SETUP_CFG = './setup.cfg'
+SETUP_CFG = os.path.join(os.path.dirname(__file__), './setup.cfg')
 GITHUB_OUT = os.getenv('GITHUB_OUTPUT')
 
 logging.basicConfig(level=logging.INFO)
@@ -73,7 +75,7 @@ def update_config(checksum_file_content: str, newest_version_str: str) -> None:
 
 
 def update_version(newest_version_str):
-    with open('VERSION.txt', 'w') as file:
+    with open(VERSION, 'w') as file:
         file.write(newest_version_str)
 
 
@@ -101,7 +103,7 @@ def get_checksums(checksum_file_content, config):
 
 
 def get_version():
-    with open('VERSION.txt') as r:
+    with open(VERSION) as r:
         return r.read()
 
 
