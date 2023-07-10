@@ -40,7 +40,7 @@ jobs:
   publish-to-test:
     needs: build
     runs-on: ubuntu-latest
-#    if: "github.ref_type == 'tag'"
+    #    if: "github.ref_type == 'tag'"
     environment:
       name: TestPyPI
     permissions:
@@ -51,11 +51,18 @@ jobs:
         with:
           name: build
           path: dist/
-
-      - name: Publish package distributions to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          # using trusted publisher, no need for token
+      # using trusted publisher, no need for token
+      # bug workaround:
+      # WARNING  Error during upload. Retry with the --verbose option for more details.
+      # ERROR    HTTPError: 400 Bad Request from https://test.pypi.org/legacy/
+      #          Binary wheel 'actionlint_py-1.6.24-py2.py3-none-linux_x86_64.whl' has
+      #          an unsupported platform tag 'linux_x86_64'.
+      - name: Upload to test mirror
+        run: |
+          python -m twine upload --repository-url https://test.pypi.org/legacy/ ./dist/*.tar.gz --username __token__
+#      - name: Publish package distributions to TestPyPI
+#        uses: pypa/gh-action-pypi-publish@release/v1
+#        with:
+#          repository-url: https://test.pypi.org/legacy/
 #          user: __token__
 #          password: ${{ secrets.PYPI_API_TOKEN }}
