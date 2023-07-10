@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.check-version.outputs.version }}
+      update_required: ${{ steps.check-version.outputs.update_required }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
@@ -32,7 +35,8 @@ jobs:
           commit_message: New release ${{ steps.check-version.outputs.version }}
 #          tagging_message: 'v${{ steps.check-version.outputs.version }}'
   call-release:
+    needs: check-for-update
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/automatic-release.yml@release-action
-    if: ${{ steps.check-version.outputs.version }} == "true"
+    if: ${{ needs.check-for-update.outputs.update_required }} == "true"
     permissions:
       id-token: write
