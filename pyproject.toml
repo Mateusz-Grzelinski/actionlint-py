@@ -43,8 +43,12 @@ dev = ["black"]
 [tool.black]
 line-length = 120
 
-[tool.setuptools.packages.find]
-where = ["."]
+[tool.setuptools]
+packages = ["_custom_build"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+_custom_build=["*.txt", "*.cfg"]
 
 [tool.setuptools.cmdclass]
 fetch_binaries="_custom_build.fetch_binaries"

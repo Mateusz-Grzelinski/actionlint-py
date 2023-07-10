@@ -73,7 +73,7 @@ def update_config(checksum_file_content: str, newest_version_str: str) -> None:
 
 
 def update_version(newest_version_str):
-    with open('VERSION', 'w') as file:
+    with open('VERSION.txt', 'w') as file:
         file.write(newest_version_str)
 
 
@@ -101,7 +101,7 @@ def get_checksums(checksum_file_content, config):
 
 
 def get_version():
-    with open('./VERSION') as r:
+    with open('VERSION.txt') as r:
         return r.read()
 
 
