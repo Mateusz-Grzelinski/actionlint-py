@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - release*
     tags:
       - v*
   workflow_dispatch:
@@ -86,7 +85,7 @@ jobs:
   publish-to-release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_call' && startsWith(github.ref, 'refs/tags')
+    if: (github.event_name == 'workflow_call' || github.event_name == 'push') && startsWith(github.ref, 'refs/tags')
     environment:
       name: TestPyPI
     permissions:
