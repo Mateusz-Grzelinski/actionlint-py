@@ -25,11 +25,12 @@ jobs:
         with:
           name: build
           path: dist/
+        continue-on-error: true
 
   publish-to-test:
     needs: build
     runs-on: ubuntu-latest
-    if: "github.ref_type == 'tag'"
+#    if: "github.ref_type == 'tag'"
     environment:
       name: TestPyPI
     permissions:

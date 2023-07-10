@@ -32,14 +32,19 @@ jobs:
 
       - name: Debug prints
         run: |
-          echo ${{ steps.check-version.outputs.version }}
+          echo "# New version: " ${{ steps.check-version.outputs.version }} >> $GITHUB_STEP_SUMMARY
           echo ${{ steps.check-version.outputs.update_required }}
 
-      - run: git status; git diff
+      - run: |
+          echo "# Status" >> $GITHUB_STEP_SUMMARY
+          git status >> $GITHUB_STEP_SUMMARY
+          echo "# Diff" >> $GITHUB_STEP_SUMMARY
+          git diff >> $GITHUB_STEP_SUMMARY
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: New release ${{ steps.check-version.outputs.version }}
           tagging_message: v${{ steps.check-version.outputs.version }}
+
   call-release:
     needs: check-for-update
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/automatic-release.yml@release-action
