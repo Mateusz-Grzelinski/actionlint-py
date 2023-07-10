@@ -5,7 +5,7 @@ The script [setup_auto_update.py](setup_auto_update.py) scraps the release page 
 the newest release. It is not great quality script, but it works. Just run:
 
 ```shell
-python setup_auto_update.py
+python auto_update_main.py
 ```
 
 Investigate changes in [setup.cfg](setup.cfg).

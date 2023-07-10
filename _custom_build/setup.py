@@ -23,6 +23,7 @@ class install(orig_install):
 command_overrides = {
     'install': install,
     'build': build,
+    'build_py': build,
 }
 
 try:
