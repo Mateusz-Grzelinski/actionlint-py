@@ -50,3 +50,4 @@ jobs:
     if: needs.check-for-update.outputs.update_required == 'true'
     permissions:
       id-token: write
+      contents: write
