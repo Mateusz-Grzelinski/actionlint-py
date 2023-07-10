@@ -43,8 +43,8 @@ dev = ["black"]
 [tool.black]
 line-length = 120
 
-[tool.setuptools]
-py-modules = []
+[tool.setuptools.packages.find]
+where = ["."]
 
 [tool.setuptools.cmdclass]
 fetch_binaries="_custom_build.fetch_binaries"
