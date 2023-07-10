@@ -43,6 +43,6 @@ jobs:
   call-release:
     needs: check-for-update
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/automatic-release.yml@release-action
-    if: ${{ needs.check-for-update.outputs.update_required }} == "true"
+    if: needs.check-for-update.outputs.update_required == "true"
     permissions:
       id-token: write
