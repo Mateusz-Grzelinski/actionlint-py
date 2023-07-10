@@ -40,7 +40,7 @@ jobs:
   publish-to-test:
     needs: build
     runs-on: ubuntu-latest
-    if: "github.ref_type == 'tag'"
+#    if: "github.ref_type == 'tag'"
     environment:
       name: TestPyPI
     permissions:
