@@ -1,7 +1,7 @@
 [build-system]
 requires = ["setuptools>=61.0.0", "wheel", "requests", "semver"]
-build-backend = "setuptools.build_meta:__legacy__"
-#build-backend = "setuptools.build_meta"
+#build-backend = "setuptools.build_meta:__legacy__"
+build-backend = "setuptools.build_meta"
 #build-backend = "backend_main"
 #build-backend = "setup"
 #backend-path = ["_custom_build"]
@@ -47,9 +47,11 @@ line-length = 120
 py-modules = []
 
 [tool.setuptools.cmdclass]
-#build_py = "_custom_build.build_py"
 fetch_binaries="_custom_build.fetch_binaries"
 install_actionlint="_custom_build.install_actionlint"
+install="_custom_build.install"
+build="_custom_build.build"
+bdist_wheel="_custom_build.bdist_wheel"
 
 [tool.setuptools.dynamic]
 version = {attr = "_custom_build.VERSION"}

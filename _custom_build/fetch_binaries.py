@@ -6,19 +6,17 @@ import os
 import platform
 import sys
 
-from distutils.core import Command
 from setuptools import Command
-from setuptools.command.build import SubCommand
 
 from ._file_ops import download
 from ._file_ops import extract
 from ._file_ops import save_executable
 
-logging.basicConfig(level=logging.INFO)
 SETUP_CFG = os.path.join(os.path.dirname(__file__), 'setup.cfg')
 
 
 class fetch_binaries(Command):
+    description = 'fetch binaries based on config in setup.cfg'
     build_temp = None
     user_options: list[tuple] = []
 
@@ -30,7 +28,6 @@ class fetch_binaries(Command):
 
     def run(self):
         # save binary to self.build_temp
-        # url, sha256 = get_download_url()
         config = configparser.ConfigParser()
         config.read(SETUP_CFG)
         section = sys.platform + '-' + platform.machine()

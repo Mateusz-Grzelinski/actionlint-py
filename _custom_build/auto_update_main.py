@@ -9,8 +9,6 @@ import requests
 import semver
 from requests_html import HTMLSession
 
-import setup
-
 ACTIONLINT_RELEASES = 'https://github.com/rhysd/actionlint/releases/'
 SETUP_CFG = './setup.cfg'
 
@@ -118,7 +116,10 @@ def main():
     checksum_file_content = get_checksum_file(newest_release_link)
     update_config(checksum_file_content, newest_version_str)
     update_version(newest_version_str)
-    log.info('Local config updated.')
+    log.warning(
+        'Local config updated. A new commit is required, ending with error.',
+    )
+    exit(1)
 
 
 if __name__ == '__main__':
