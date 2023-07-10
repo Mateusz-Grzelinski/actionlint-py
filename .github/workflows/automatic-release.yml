@@ -59,7 +59,6 @@ jobs:
       - run: |
           python -m pip install --upgrade pip
           pip install twine
-      # using trusted publisher, no need for token
       # bug workaround:
       # WARNING  Error during upload. Retry with the --verbose option for more details.
       # ERROR    HTTPError: 400 Bad Request from https://test.pypi.org/legacy/
@@ -67,10 +66,12 @@ jobs:
       #          an unsupported platform tag 'linux_x86_64'.
       - name: Upload to test mirror
         run: |
-          python -m twine upload --repository-url https://test.pypi.org/legacy/ ./dist/*.tar.gz --username __token__
+          python -m twine upload --repository-url https://test.pypi.org/legacy/ ./dist/*.tar.gz --username __token__ --password ${{ secrets.TEST_PYPI_API_TOKEN }}
+# todo some day use an action
 #      - name: Publish package distributions to TestPyPI
 #        uses: pypa/gh-action-pypi-publish@release/v1
 #        with:
 #          repository-url: https://test.pypi.org/legacy/
 #          user: __token__
 #          password: ${{ secrets.PYPI_API_TOKEN }}
+# using trusted publisher, no need for token
