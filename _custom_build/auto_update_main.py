@@ -104,7 +104,7 @@ def get_checksums(checksum_file_content, config):
 
 def get_version():
     with open(VERSION) as r:
-        return r.read()
+        return r.read().strip()
 
 
 def main():

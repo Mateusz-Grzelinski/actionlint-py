@@ -1,6 +1,5 @@
 name: Check for update
 on:
-  push:
   workflow_dispatch:
   schedule:
     # once a day
@@ -42,7 +41,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: New release ${{ steps.check-version.outputs.version }}
-          tagging_message: vvv${{ steps.check-version.outputs.version }}
+          tagging_message: v${{ steps.check-version.outputs.version }}
 
   call-release:
     needs: check-for-update

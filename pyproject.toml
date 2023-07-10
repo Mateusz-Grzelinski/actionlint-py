@@ -57,4 +57,3 @@ bdist_wheel="_custom_build.bdist_wheel"
 
 [tool.setuptools.dynamic]
 version = {attr = "_custom_build.VERSION"}
-#readme = {file = ["README.md"], content-type = "text/markdown"}
