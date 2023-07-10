@@ -12,7 +12,7 @@ on:
       tag:
         description: Provide a value to check out
         required: false
-        default: github.ref
+        default: ''
         type: string
 jobs:
 
