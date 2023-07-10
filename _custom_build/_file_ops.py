@@ -15,38 +15,38 @@ def download(url: str, sha256: str) -> bytes:
     with urllib.request.urlopen(url) as resp:
         code = resp.getcode()
         if code != http.HTTPStatus.OK:
-            raise ValueError(f'HTTP failure. Code: {code}')
+            raise ValueError(f"HTTP failure. Code: {code}")
         data = resp.read()
 
     checksum = hashlib.sha256(data).hexdigest()
     if checksum != sha256:
-        raise ValueError(f'sha256 mismatch, expected {sha256}, got {checksum}')
+        raise ValueError(f"sha256 mismatch, expected {sha256}, got {checksum}")
 
     return data
 
 
 def extract(url: str, data: bytes) -> bytes:
     with io.BytesIO(data) as bio:
-        if '.tar.' in url:
+        if ".tar." in url:
             with tarfile.open(fileobj=bio) as tarf:
                 for info in tarf.getmembers():
-                    if info.isfile() and info.name.endswith('actionlint'):
+                    if info.isfile() and info.name.endswith("actionlint"):
                         return tarf.extractfile(info).read()
-        elif url.endswith('.zip'):
+        elif url.endswith(".zip"):
             with zipfile.ZipFile(bio) as zipf:
                 for info in zipf.infolist():
-                    if info.filename.endswith('.exe'):
+                    if info.filename.endswith(".exe"):
                         return zipf.read(info.filename)
 
-    raise AssertionError(f'unreachable {url}')
+    raise AssertionError(f"unreachable {url}")
 
 
 def save_executable(data: bytes, base_dir: str):
-    exe = 'actionlint' if sys.platform != 'win32' else 'actionlint.exe'
+    exe = "actionlint" if sys.platform != "win32" else "actionlint.exe"
     output_path = os.path.join(base_dir, exe)
     os.makedirs(base_dir, exist_ok=True)
 
-    with open(output_path, 'wb') as fp:
+    with open(output_path, "wb") as fp:
         fp.write(data)
 
     # Mark as executable.

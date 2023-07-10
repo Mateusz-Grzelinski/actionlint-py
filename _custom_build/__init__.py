@@ -8,5 +8,5 @@ from .fetch_binaries import fetch_binaries
 from .install import install
 from .install_actionlint import install_actionlint
 
-with open(os.path.join(os.path.dirname(__file__), 'VERSION.txt')) as f:
+with open(os.path.join(os.path.dirname(__file__), "VERSION.txt")) as f:
     VERSION = f.read().strip()
