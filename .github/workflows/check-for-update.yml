@@ -1,0 +1,30 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    # once a day
+    - cron:  '0 0 * * *'
+jobs:
+  check-for-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        id: set-up-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - run: pip install requests semver
+      - run: python ./_custom_build/auto_update_main.py
+        id: check-version
+        continue-on-error: true
+      - run: echo ${{ steps.check-version.outputs.version }}
+      - run: git status; git diff
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: New release ${{ steps.check-version.outputs.version }}
+          tagging_message: 'v${{ steps.check-version.outputs.version }}'
+      - uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/automatic-release.yml@release-action

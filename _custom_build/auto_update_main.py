@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import configparser
 import logging
+import os
 from dataclasses import dataclass
 from typing import Iterable
 
@@ -11,6 +12,7 @@ from requests_html import HTMLSession
 
 ACTIONLINT_RELEASES = 'https://github.com/rhysd/actionlint/releases/'
 SETUP_CFG = './setup.cfg'
+GITHUB_OUT = os.getenv('GITHUB_OUTPUT')
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
@@ -112,6 +114,9 @@ def main():
     current_version = semver.Version.parse(get_version())
     if newest_version.compare(current_version) != 1:
         log.info('Local version is newest, all good. Exiting.')
+        with open(GITHUB_OUT, 'a') as file:
+            file.write(f'version={newest_version_str}\n')
+            file.write(f'update_required=false\n')
         exit(0)
     checksum_file_content = get_checksum_file(newest_release_link)
     update_config(checksum_file_content, newest_version_str)
@@ -119,6 +124,9 @@ def main():
     log.warning(
         'Local config updated. A new commit is required, ending with error.',
     )
+    with open(GITHUB_OUT, 'a') as file:
+        file.write(f'version={newest_version_str}\n')
+        file.write(f'update_required=true\n')
     exit(1)
 
 
