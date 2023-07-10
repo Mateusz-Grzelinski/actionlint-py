@@ -52,4 +52,9 @@ or to avoid going twice to internet (might help with proxy):
 
 # Development
 
-Development of wrapper and releasing new version: see [README-DEV.md](README-DEV.md)
+Development of wrapper and releasing new version: see [README-DEV.md](./README-DEV.md)
+
+# Roadmap
+
+- [ ] Update tag in readme in github action when releasing new version
+- [ ] Upload also binary distribution, not only source distribution

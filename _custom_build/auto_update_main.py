@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import configparser
 import logging
+import os
 from dataclasses import dataclass
 from typing import Iterable
 
@@ -9,8 +10,11 @@ import requests
 import semver
 from requests_html import HTMLSession
 
+VERSION = os.path.join(os.path.dirname(__file__), 'VERSION.txt')
+
 ACTIONLINT_RELEASES = 'https://github.com/rhysd/actionlint/releases/'
-SETUP_CFG = './setup.cfg'
+SETUP_CFG = os.path.join(os.path.dirname(__file__), './setup.cfg')
+GITHUB_OUT = os.getenv('GITHUB_OUTPUT')
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger()
@@ -71,7 +75,7 @@ def update_config(checksum_file_content: str, newest_version_str: str) -> None:
 
 
 def update_version(newest_version_str):
-    with open('VERSION', 'w') as file:
+    with open(VERSION, 'w') as file:
         file.write(newest_version_str)
 
 
@@ -99,8 +103,8 @@ def get_checksums(checksum_file_content, config):
 
 
 def get_version():
-    with open('./VERSION') as r:
-        return r.read()
+    with open(VERSION) as r:
+        return r.read().strip()
 
 
 def main():
@@ -112,6 +116,9 @@ def main():
     current_version = semver.Version.parse(get_version())
     if newest_version.compare(current_version) != 1:
         log.info('Local version is newest, all good. Exiting.')
+        with open(GITHUB_OUT, 'a') as file:
+            file.write(f'version={newest_version_str}\n')
+            file.write(f'update_required=false\n')
         exit(0)
     checksum_file_content = get_checksum_file(newest_release_link)
     update_config(checksum_file_content, newest_version_str)
@@ -119,7 +126,9 @@ def main():
     log.warning(
         'Local config updated. A new commit is required, ending with error.',
     )
-    exit(1)
+    with open(GITHUB_OUT, 'a') as file:
+        file.write(f'version={newest_version_str}\n')
+        file.write(f'update_required=true\n')
 
 
 if __name__ == '__main__':

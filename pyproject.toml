@@ -9,11 +9,9 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "actionlint_py"
 dynamic = ["version"]
-
-[options]
-python_requires = ">=3.7"
 description = "Python wrapper around invoking actionlint (https://github.com/rhysd/actionlint)"
 readme = "README.md"
+
 requires-python = ">=3.7"
 license = { file = "LICENSE" }
 authors = [
@@ -44,7 +42,11 @@ dev = ["black"]
 line-length = 120
 
 [tool.setuptools]
-py-modules = []
+packages = ["_custom_build"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+_custom_build=["*.txt", "*.cfg", "*.md"]
 
 [tool.setuptools.cmdclass]
 fetch_binaries="_custom_build.fetch_binaries"

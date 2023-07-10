@@ -1,0 +1,52 @@
+name: Check for update
+on:
+  workflow_dispatch:
+  schedule:
+    # once a day
+    - cron:  '0 0 * * *'
+jobs:
+  check-for-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.check-version.outputs.version }}
+      update_required: ${{ steps.check-version.outputs.update_required }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        id: set-up-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - run: |
+          python -m pip install --upgrade pip
+          pip install requests semver requests_html
+
+      - run: python ./_custom_build/auto_update_main.py
+        id: check-version
+        continue-on-error: true
+
+      - name: Debug prints
+        run: |
+          echo "# New version: " ${{ steps.check-version.outputs.version }} >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.check-version.outputs.update_required }}
+
+      - run: |
+          echo "# Status" >> $GITHUB_STEP_SUMMARY
+          git status >> $GITHUB_STEP_SUMMARY
+          echo "# Diff" >> $GITHUB_STEP_SUMMARY
+          git diff >> $GITHUB_STEP_SUMMARY
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: New release ${{ steps.check-version.outputs.version }}
+          tagging_message: v${{ steps.check-version.outputs.version }}
+
+  call-release:
+    needs: check-for-update
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/automatic-release.yml@release-action
+    if: needs.check-for-update.outputs.update_required == 'true'
+    permissions:
+      id-token: write
+      contents: write
