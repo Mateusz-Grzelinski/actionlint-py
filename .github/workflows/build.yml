@@ -29,9 +29,9 @@ jobs:
 
       - if: contains(github.ref, 'release')
         run: |
-          cat _custom_build/VERSION_BUILD_SYTEM.txt | tr -d "[:space:]" > _custom_build/VERSION_BUILD_SYTEM.txt
-          echo -n '-' >> _custom_build/VERSION_BUILD_SYTEM.txt
-          git rev-parse --short HEAD >> _custom_build/VERSION_BUILD_SYTEM.txt
+          NUMBER=$(cat _custom_build/VERSION_BUILD_SYTEM.txt | tr -d "[:space:]" )
+          HASH=$(git rev-parse --short HEAD)
+          echo -n "$NUMBER#$HASH" > _custom_build/VERSION_BUILD_SYTEM.txt
       - run: python -m build
 
       - run: |
