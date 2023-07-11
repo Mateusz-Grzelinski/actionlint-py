@@ -1,0 +1,25 @@
+on:
+  workflow_dispatch:
+  push:
+    branches-ignore:
+      - '!main'
+    paths:
+      - _custom_build/VERSION_DEV.txt
+jobs:
+  tag-relase:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Reset dev version
+        run: |
+          echo "0" > _custom_build/VERSION_DEV.txt
+      - run: python -m build
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: contains(github.ref, 'release')
+        with:
+          commit_message: Reset dev version

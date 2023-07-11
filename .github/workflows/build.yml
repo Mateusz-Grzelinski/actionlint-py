@@ -27,11 +27,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - if: contains(github.ref, 'release')
+      - name: Increment dev version
         run: |
-          NUMBER=$(cat _custom_build/VERSION_BUILD_SYTEM.txt | tr -d "[:space:]" )
-          HASH=$(git rev-parse --short HEAD)
-          echo -n "$NUMBER"'#'"$HASH" | tee _custom_build/VERSION_BUILD_SYTEM.txt
+          cat _custom_build/VERSION_DEV.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_DEV.txt
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: contains(github.ref, 'release')
+        with:
+          commit_message: Increment dev version
+
+      - name: Append dev version
+        run: |
+          echo "dev."$(cat _custom_build/VERSION_DEV.txt) >> _custom_build/VERSION_BUILD_SYTEM.txt
+
       - run: python -m build
 
       - run: |
