@@ -24,7 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - if: contains("release", github.ref)
+      - if: contains('release', github.ref)
         run: |
           cat _custom_build/VERSION_BUILD_SYTEM.txt | tr -d "[:space:]" > _custom_build/VERSION_BUILD_SYTEM.txt
           echo -n '-' >> _custom_build/VERSION_BUILD_SYTEM.txt
@@ -43,13 +43,14 @@ jobs:
 
   publish-to-test:
     needs: build
-    if: contains("release", github.ref)
+    if: contains('release', github.ref)
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@pyproject-build-custom-backend
     permissions:
       id-token: write
       contents: write
     with:
       upload-mirror: "https://test.pypi.org/legacy/"
+    secrets:
       pypi-token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   publish-to-release:
@@ -61,4 +62,5 @@ jobs:
       contents: write
     with:
       upload-mirror: "https://pypi.org/legacy/"
+    secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}

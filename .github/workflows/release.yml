@@ -1,22 +1,11 @@
 name: Release to pypi mirror
 on:
-  workflow_dispatch:
-    inputs:
-      upload-mirror:
-        description: Upload url
-        default: "https://test.pypi.org/legacy/"
-        required: true
-        type: string
-    secrets:
-      pypi-token:
-        description: Upload url
-        required: true
   workflow_call:
     inputs:
       upload-mirror:
         description: Upload url
         default: "https://test.pypi.org/legacy/"
-        required: true
+        required: false
         type: string
     secrets:
       pypi-token:
@@ -47,7 +36,7 @@ jobs:
           pip install twine
       - name: Upload to test mirror
         run: |
-          python -m twine upload --repository-url ${{ inputs.release-mirror }} ./dist/*.tar.gz --username __token__ --password ${{ secrets.pypi-token }}
+          python -m twine upload --repository-url ${{ inputs.upload-mirror }} ./dist/*.tar.gz --username __token__ --password ${{ secrets.pypi-token }}
 # todo some day use an action
 # bug workaround:
 # WARNING  Error during upload. Retry with the --verbose option for more details.
