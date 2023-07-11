@@ -27,7 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - if: contains('refs/remotes/pull', github.ref)
+      - if: contains(github.ref, 'release')
         run: |
           cat _custom_build/VERSION_BUILD_SYTEM.txt | tr -d "[:space:]" > _custom_build/VERSION_BUILD_SYTEM.txt
           echo -n '-' >> _custom_build/VERSION_BUILD_SYTEM.txt
@@ -46,7 +46,7 @@ jobs:
 
   publish-to-test:
     needs: build
-    if: contains('refs/remotes/pull', github.ref)
+    if: contains(github.ref, 'release')
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@release-new-build-system
     permissions:
       id-token: write
