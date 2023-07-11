@@ -1,6 +1,5 @@
 name: Check for update
 on:
-  push:
   workflow_dispatch:
   schedule:
     # once a day

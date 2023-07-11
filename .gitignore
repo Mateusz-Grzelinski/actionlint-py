@@ -1,5 +1,7 @@
 *.egg-info
 .idea
+pycache
+__pycache__
 /.tox
 /build
 /dist
