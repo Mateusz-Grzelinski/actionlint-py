@@ -15,7 +15,7 @@ SETUP_CFG = os.path.join(os.path.dirname(__file__), "..", "checksums.cfg")
 class fetch_binaries(Command):
     description = "fetch binaries based on config in checksums.cfg"
     build_temp = None
-    user_options: list[tuple] = []
+    user_options: "list[tuple]" = []
 
     def initialize_options(self):
         pass

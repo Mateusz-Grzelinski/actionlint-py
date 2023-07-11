@@ -5,7 +5,7 @@ class install_actionlint(Command):
     description = "install the actionlint executable"
     outfiles = ()
     build_dir = install_dir = None
-    user_options: list[tuple] = []
+    user_options: "list[tuple]" = []
 
     def initialize_options(self):
         pass
