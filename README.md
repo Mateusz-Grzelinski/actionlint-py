@@ -58,3 +58,8 @@ Development of wrapper and releasing new version: see [README-DEV.md](./README-D
 
 - [ ] Update tag in readme in github action when releasing new version
 - [ ] Upload also binary distribution, not only source distribution
+- [ ] Add unit tests to build system
+
+Won't do unless asked:
+
+- support all platforms that actionlint supports (like freebsd)

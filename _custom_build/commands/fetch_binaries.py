@@ -7,15 +7,15 @@ import sys
 
 from setuptools import Command
 
-from ._file_ops import download
-from ._file_ops import extract
-from ._file_ops import save_executable
+from ..utils.file_ops import download
+from ..utils.file_ops import extract
+from ..utils.file_ops import save_executable
 
-SETUP_CFG = os.path.join(os.path.dirname(__file__), "setup.cfg")
+SETUP_CFG = os.path.join(os.path.dirname(__file__), "..", "checksums.cfg")
 
 
 class fetch_binaries(Command):
-    description = "fetch binaries based on config in setup.cfg"
+    description = "fetch binaries based on config in checksums.cfg"
     build_temp = None
     user_options: list[tuple] = []
 
