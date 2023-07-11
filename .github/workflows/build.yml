@@ -1,12 +1,15 @@
 name: Build and optionally trigger release
 on:
   pull_request:
+    # only PR from release can trigger a test release
     branches:
-      - main
       - release*
   push:
+    # only tagged release can trigger prod release and main branch
     tags:
       - v*
+    branches-ignore:
+      - '!main'
   workflow_dispatch:
 jobs:
 
@@ -24,7 +27,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - if: contains('release', github.ref)
+      - if: contains('refs/remotes/pull', github.ref)
         run: |
           cat _custom_build/VERSION_BUILD_SYTEM.txt | tr -d "[:space:]" > _custom_build/VERSION_BUILD_SYTEM.txt
           echo -n '-' >> _custom_build/VERSION_BUILD_SYTEM.txt
@@ -43,7 +46,7 @@ jobs:
 
   publish-to-test:
     needs: build
-    if: contains('release', github.ref)
+    if: contains('refs/remotes/pull', github.ref)
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@release-new-build-system
     permissions:
       id-token: write
@@ -55,7 +58,7 @@ jobs:
 
   publish-to-release:
     needs: build
-    if: startsWith(github.ref, 'refs/tags')
+    if: startsWith(github.ref, 'refs/tags') && endsWith(github.ref, 'main')
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@release-new-build-system
     permissions:
       id-token: write
