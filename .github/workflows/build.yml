@@ -1,0 +1,64 @@
+name: Build and optionally trigger release
+on:
+  pull_request:
+    branches:
+      - main
+      - release*
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        id: set-up-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - if: contains("release", github.ref)
+        run: |
+          cat _custom_build/VERSION_BUILD_SYTEM.txt | tr -d "[:space:]" > _custom_build/VERSION_BUILD_SYTEM.txt
+          echo -n '-' >> _custom_build/VERSION_BUILD_SYTEM.txt
+          git rev-parse --short HEAD >> _custom_build/VERSION_BUILD_SYTEM.txt
+      - run: python -m build
+
+      - run: |
+          echo "# Twine check" >> $GITHUB_STEP_SUMMARY
+          python -m twine check dist/* >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload package distributions
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: dist/
+
+  publish-to-test:
+    needs: build
+    if: contains("release", github.ref)
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@pyproject-build-custom-backend
+    permissions:
+      id-token: write
+      contents: write
+    with:
+      upload-mirror: "https://test.pypi.org/legacy/"
+      pypi-token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+
+  publish-to-release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags')
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@pyproject-build-custom-backend
+    permissions:
+      id-token: write
+      contents: write
+    with:
+      upload-mirror: "https://pypi.org/legacy/"
+      pypi-token: ${{ secrets.PYPI_API_TOKEN }}

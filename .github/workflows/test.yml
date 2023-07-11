@@ -1,8 +1,6 @@
 name: Test (tox)
 
 on:
-  push:
-    branches: [main, test-me-*]
   pull_request:
 
 jobs:

@@ -33,6 +33,7 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["black"]
+auto_update = ["requests", "semver", "requests_html"]
 
 [project.urls]
 "Homepage" = "https://github.com/Mateusz-Grzelinski/actionlint-py"
@@ -42,7 +43,11 @@ dev = ["black"]
 line-length = 120
 
 [tool.setuptools]
-packages = ["_custom_build"]
+packages = [
+    "_custom_build",
+    "_custom_build.commands",
+    "_custom_build.utils"
+]
 include-package-data = true
 
 [tool.setuptools.package-data]

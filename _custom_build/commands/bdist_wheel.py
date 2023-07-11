@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from wheel.bdist_wheel import bdist_wheel as orig_bdist_wheel
 
 

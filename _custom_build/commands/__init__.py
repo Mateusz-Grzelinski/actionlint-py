@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from .bdist_wheel import bdist_wheel
 from .build import build
 from .fetch_binaries import fetch_binaries

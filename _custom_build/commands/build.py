@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from distutils.command.build import build as orig_build
 
 

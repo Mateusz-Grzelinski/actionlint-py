@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from setuptools.command.install import install as orig_install
 
 

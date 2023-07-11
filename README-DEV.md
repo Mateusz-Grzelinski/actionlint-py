@@ -30,6 +30,7 @@ Build and check:
 
 ```shell
 # python .\setup.py sdist bdist_wheel # deprecated
+# python -c "from setuptools import setup; setup()" build # deprecated
 python -m build
 python -m twine check .\dist\*
 ```
