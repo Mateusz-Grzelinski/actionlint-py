@@ -6,12 +6,10 @@ on:
     paths:
       - _custom_build/VERSION_DEV.txt
 jobs:
-  tag-relase:
+  commit:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-  commit:
-    runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
