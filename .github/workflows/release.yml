@@ -36,7 +36,8 @@ jobs:
           pip install twine
       - name: Upload to test mirror
         run: |
-          python -m twine upload --repository-url ${{ inputs.upload-mirror }} ./dist/*.tar.gz --username __token__ --password ${{ secrets.pypi-token }}
+          echo "# Upload" >> $GITHUB_SUMMARY
+          python -m twine upload --non-interactive --disable-progress-bar --repository-url ${{ inputs.upload-mirror }} ./dist/*.tar.gz --username __token__ --password ${{ secrets.pypi-token }} | tee $GITHUB_SUMMARY
 # todo some day use an action
 # bug workaround:
 # WARNING  Error during upload. Retry with the --verbose option for more details.
