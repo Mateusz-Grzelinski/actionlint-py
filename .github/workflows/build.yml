@@ -5,7 +5,7 @@ on:
     branches:
       - release*
   push:
-    # only tagged release can trigger prod release and main branch
+    # only tagged commit on main can trigger prod release
     tags:
       - v*
     branches-ignore:
@@ -39,6 +39,7 @@ jobs:
           commit_message: Increment dev version
 
       - name: Append dev version
+        # I am simply appending dev version to build system version
         run: |
           echo "dev."$(cat _custom_build/VERSION_DEV.txt) >> _custom_build/VERSION_BUILD_SYTEM.txt
 

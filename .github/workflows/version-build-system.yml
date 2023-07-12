@@ -1,10 +1,12 @@
+name: Reset VERSION_DEV.txt to 0
 on:
   workflow_dispatch:
   push:
     branches-ignore:
       - '!main'
     paths:
-      - _custom_build/VERSION_DEV.txt
+      - _custom_build/**
+      - pyproject.toml
 jobs:
   commit:
     runs-on: ubuntu-latest
@@ -13,9 +15,9 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Reset dev version
+      - name: Increment cuild system version
         run: |
-          echo "0" > _custom_build/VERSION_DEV.txt
+          cat _custom_build/VERSION_BUILD_SYSTEM.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_BUILD_SYSTEM.txt
       - run: python -m build
       - uses: stefanzweifel/git-auto-commit-action@v4
         if: contains(github.ref, 'release')
