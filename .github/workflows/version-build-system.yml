@@ -2,8 +2,8 @@ name: Reset VERSION_DEV.txt to 0
 on:
   workflow_dispatch:
   push:
-    branches-ignore:
-      - '!main'
+    branches:
+      - 'main'
     paths:
       - _custom_build/**
       - pyproject.toml

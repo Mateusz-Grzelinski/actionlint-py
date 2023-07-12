@@ -8,8 +8,8 @@ on:
     # only tagged commit on main can trigger prod release
     tags:
       - v*
-    branches-ignore:
-      - '!main'
+    branches:
+      - 'main'
   workflow_dispatch:
 jobs:
 
