@@ -1,3 +1,5 @@
+name: Tag release
+
 on:
   workflow_dispatch:
     # tag should automatically trigger public release

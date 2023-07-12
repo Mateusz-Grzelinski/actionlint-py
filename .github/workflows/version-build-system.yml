@@ -1,4 +1,4 @@
-name: Reset VERSION_DEV.txt to 0
+name: Increment VERSION_BUILD_SYSTEM
 on:
   workflow_dispatch:
   push:
