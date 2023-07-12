@@ -20,6 +20,5 @@ jobs:
           echo "0" > _custom_build/VERSION_DEV.txt
       - run: python -m build
       - uses: stefanzweifel/git-auto-commit-action@v4
-        if: contains(github.ref, 'release')
         with:
-          commit_message: Reset dev version
+          commit_message: Reset dev version to 0

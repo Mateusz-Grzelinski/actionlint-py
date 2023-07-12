@@ -20,6 +20,5 @@ jobs:
           cat _custom_build/VERSION_BUILD_SYSTEM.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_BUILD_SYSTEM.txt
       - run: python -m build
       - uses: stefanzweifel/git-auto-commit-action@v4
-        if: contains(github.ref, 'release')
         with:
-          commit_message: Reset dev version
+          commit_message: Increment build system version
