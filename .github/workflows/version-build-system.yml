@@ -2,13 +2,13 @@ name: Reset VERSION_DEV.txt to 0
 on:
   workflow_dispatch:
   push:
-    branches-ignore:
-      - '!main'
+    branches:
+      - 'main'
     paths:
       - _custom_build/**
       - pyproject.toml
 jobs:
-  commit:
+  commit-version-build-system:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -18,7 +18,6 @@ jobs:
       - name: Increment cuild system version
         run: |
           cat _custom_build/VERSION_BUILD_SYSTEM.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_BUILD_SYSTEM.txt
-      - run: python -m build
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Increment build system version
