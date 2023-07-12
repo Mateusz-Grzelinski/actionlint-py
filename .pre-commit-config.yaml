@@ -17,3 +17,7 @@ repos:
     rev: 23.7.0
     hooks:
     - id: black
+- repo: https://github.com/Mateusz-Grzelinski/actionlint-py
+  rev: v1.6.25
+  hooks:
+    - id: actionlint
