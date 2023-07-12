@@ -6,6 +6,7 @@ on:
       - 'main'
     paths:
       - _custom_build/**
+      - '!_custom_build/VERSION*'
       - pyproject.toml
 jobs:
   commit-version-build-system:
