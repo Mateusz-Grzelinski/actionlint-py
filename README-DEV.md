@@ -24,6 +24,12 @@ Workflows take care of:
   [version-build-system.yml](.github/workflows/version-build-system.yml)
 - todo: those workflow means I can not write protect main branch...
 
+## Use actionlint from test mirror
+
+```shell
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --no-deps actionlint-py==1.6.25.3.dev6
+```
+
 # Change actionlint version
 
 All details about actionlint source (and checksums) are stored in [setup.cfg](setup.cfg).
