@@ -1,6 +1,32 @@
-# Change project configuration
+# Workflows
 
-All details about source package is stored in [setup.cfg](setup.cfg).
+Workflows take care of:
+
+- checking for updates every day: [check-for-update.yml](.github/workflows/check-for-update.yml)
+  and [auto_update_main.py](_custom_build/auto_update_main.py)
+- tagging a git commit using only version in file: `_custom_build/VERSION_ACTIONLINT.txt`
+  in [tag.yml](.github/workflows/tag.yml)
+    - todo: it is not ideal that pip version and tag is different...
+- making a test release using version on branch `release*`
+  [build.yml](.github/workflows/build.yml) and
+  [release.yml](.github/workflows/release.yml) and publishing it
+  to https://test.pypi.org/project/actionlint-py/#history
+    - test version is set to `python -m "_custom_build" --version` + `.devN` (development version is updated
+      automatically when PR is created)
+- making a public release using version _custom_build/VERSION_ACTIONLINT.txt
+  [build.yml](.github/workflows/build.yml) and
+  [release.yml](.github/workflows/release.yml) and publishing it
+  to https://pypi.org/project/actionlint-py/
+    - public version is set to `python -m "_custom_build" --version`
+- after `release*` branch is merged development version is reset to 0
+  [version-dev.yml](.github/workflows/version-dev.yml)
+- after `release*` branch is merged build system version is incremented
+  [version-build-system.yml](.github/workflows/version-build-system.yml)
+- todo: those workflow means I can not write protect main branch...
+
+# Change actionlint version
+
+All details about actionlint source (and checksums) are stored in [setup.cfg](setup.cfg).
 The script [setup_auto_update.py](setup_auto_update.py) scraps the release page of actionlint and sets the checksums to
 the newest release. It is not great quality script, but it works. Just run:
 
@@ -8,9 +34,9 @@ the newest release. It is not great quality script, but it works. Just run:
 python auto_update_main.py
 ```
 
-Investigate changes in [setup.cfg](setup.cfg).
+# Manual release
 
-# Release
+https://test.pypi.org/manage/project/actionlint-py/releases/
 
 https://pypi.org/manage/project/actionlint-py/releases/
 
@@ -18,12 +44,6 @@ Install dependencies:
 
 ```shell
 pip install --upgrade build twine
-```
-
-Can not remember what this does:
-
-```shell
-# python -m build --no-isolation
 ```
 
 Build and check:

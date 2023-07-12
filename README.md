@@ -60,6 +60,8 @@ Development of wrapper and releasing new version: see [README-DEV.md](./README-D
 - [ ] Upload also binary distribution, not only source distribution
 - [ ] Add unit tests to build system
 
+See [README-DEV.md](./README-DEV.md) for more TODOs.
+
 Won't do unless asked:
 
 - support all platforms that actionlint supports (like freebsd)
