@@ -1,15 +1,17 @@
 [build-system]
 requires = ["setuptools>=61.0.0", "wheel", "requests", "semver"]
-build-backend = "setuptools.build_meta:__legacy__"
+#build-backend = "setuptools.build_meta:__legacy__"
+build-backend = "setuptools.build_meta"
+#build-backend = "backend_main"
+#build-backend = "setup"
+#backend-path = ["_custom_build"]
 
 [project]
 name = "actionlint_py"
 dynamic = ["version"]
-
-[options]
-python_requires = ">=3.7"
 description = "Python wrapper around invoking actionlint (https://github.com/rhysd/actionlint)"
 readme = "README.md"
+
 requires-python = ">=3.7"
 license = { file = "LICENSE" }
 authors = [
@@ -31,16 +33,32 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["black"]
+auto_update = ["requests", "semver", "requests_html"]
 
 [project.urls]
 "Homepage" = "https://github.com/Mateusz-Grzelinski/actionlint-py"
 "Bug Reports" = "https://github.com/Mateusz-Grzelinski/actionlint-py/issues"
 
-#[project.scripts]
-#hello = "hello:main"
-
-#[tool.setuptools]
-#package-data = { "sample" = ["*.dat"] }
-
 [tool.black]
 line-length = 120
+
+[tool.setuptools]
+packages = [
+    "_custom_build",
+    "_custom_build.commands",
+    "_custom_build.utils"
+]
+include-package-data = true
+
+[tool.setuptools.package-data]
+_custom_build=["*.txt", "*.cfg", "*.md"]
+
+[tool.setuptools.cmdclass]
+fetch_binaries="_custom_build.fetch_binaries"
+install_actionlint="_custom_build.install_actionlint"
+install="_custom_build.install"
+build="_custom_build.build"
+bdist_wheel="_custom_build.bdist_wheel"
+
+[tool.setuptools.dynamic]
+version = {attr = "_custom_build.VERSION"}

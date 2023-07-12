@@ -1,0 +1,53 @@
+name: Release to pypi mirror
+on:
+  workflow_call:
+    inputs:
+      upload-mirror:
+        description: Upload url
+        default: "https://test.pypi.org/legacy/"
+        required: false
+        type: string
+    secrets:
+      pypi-token:
+        description: Upload url
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: TestPyPI
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Download package distributions
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: dist/
+      - name: Set up Python
+        id: set-up-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - run: |
+          python -m pip install --upgrade pip
+          pip install twine
+      - name: Upload to test mirror
+        run: |
+          echo "# Upload" >> $GITHUB_STEP_SUMMARY
+          python -m twine upload --non-interactive --disable-progress-bar --repository-url ${{ inputs.upload-mirror }} ./dist/*.tar.gz --username __token__ --password ${{ secrets.pypi-token }} >> $GITHUB_STEP_SUMMARY
+# todo some day use an action
+# bug workaround:
+# WARNING  Error during upload. Retry with the --verbose option for more details.
+# ERROR    HTTPError: 400 Bad Request from https://test.pypi.org/legacy/
+#          Binary wheel 'actionlint_py-1.6.24-py2.py3-none-linux_x86_64.whl' has
+#          an unsupported platform tag 'linux_x86_64'.
+#      - name: Publish package distributions to TestPyPI
+#        uses: pypa/gh-action-pypi-publish@release/v1
+#        with:
+#          repository-url: https://test.pypi.org/legacy/
+#          user: __token__
+#          password: ${{ secrets.PYPI_API_TOKEN }}
+# using trusted publisher, no need for token

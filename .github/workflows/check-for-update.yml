@@ -1,0 +1,57 @@
+name: Check for update
+on:
+  workflow_dispatch:
+  schedule:
+    # once a day
+    - cron:  '0 0 * * *'
+jobs:
+  check-for-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.check-version.outputs.version }}
+      update_required: ${{ steps.check-version.outputs.update_required }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        id: set-up-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - run: |
+          python -m pip install --upgrade pip
+          pip install ".[auto_update]"
+
+      - run: python ./_custom_build/auto_update_main.py
+        id: check-version
+        continue-on-error: true
+
+      - name: Debug prints
+        run: |
+          echo "# New version: " ${{ steps.check-version.outputs.version }} >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.check-version.outputs.update_required }}
+          echo "# Status" >> $GITHUB_STEP_SUMMARY
+          git status >> $GITHUB_STEP_SUMMARY
+          echo "# Diff" >> $GITHUB_STEP_SUMMARY
+          git diff >> $GITHUB_STEP_SUMMARY
+#      - uses: stefanzweifel/git-auto-commit-action@v4
+#        with:
+#          commit_message: New release ${{ steps.check-version.outputs.version }}
+#          tagging_message: v${{ steps.check-version.outputs.version }}
+      - name: Create Pull Request
+        if: steps.check-version.outputs.update_required == 'true'
+        uses: peter-evans/create-pull-request@v5.0.2
+        with:
+          title: New release v${{ steps.check-version.outputs.version }}
+          body: |
+            Files `_custom_build/checksums.cfg` and `_custom_build/VERSION_ACTIONLINT.txt` were updated.
+
+            See release: ${{ steps.check-version.outputs.release_url }}
+          commit-message: |
+            New release v${{ steps.check-version.outputs.version }}
+
+            See changes: ${{ steps.check-version.outputs.release_url }}
+          branch: release-v${{ steps.check-version.outputs.version }}
+          assignees: Mateusz-Grzelinski
