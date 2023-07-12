@@ -59,7 +59,7 @@ jobs:
     name: Publish release to test Pypi
     needs: build
     if: contains(github.ref, 'release')
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@release-new-build-system
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@main
     permissions:
       id-token: write
       contents: write
@@ -71,8 +71,8 @@ jobs:
   publish-to-release:
     name: Publish release to public Pypi
     needs: build
-    if: startsWith(github.ref, 'refs/tags') && endsWith(github.ref, 'main')
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@release-new-build-system
+    if: startsWith(github.ref, 'refs/tags')
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@main
     permissions:
       id-token: write
       contents: write
