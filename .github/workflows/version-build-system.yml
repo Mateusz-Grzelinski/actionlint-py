@@ -15,9 +15,11 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Increment cuild system version
+      - name: Increment build system version
+        id: build-version
         run: |
           cat _custom_build/VERSION_BUILD_SYSTEM.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_BUILD_SYSTEM.txt
+          echo "build_version=$(cat _custom_build/VERSION_BUILD_SYSTEM.txt) >> $GITHUB_OUTPUT
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Increment build system version
+          commit_message: Increment build system version to ${{ steps.build-version.outputs.build_version }}
