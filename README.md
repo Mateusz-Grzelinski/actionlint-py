@@ -29,18 +29,21 @@ Sample `.pre-commit-config.yaml`:
     - id: actionlint
 ```
 
-or to avoid going twice to internet (might help with proxy):
+Because `actionlint-py` is available as source distribution, pip build system is set up to fetch binary from (public)
+github. It might cause problems with corporate proxy. In case of problems try this semi-manual setup:
 
 ```yaml
 - repo: local
   hooks:
     - id: actionlint
       name: actionlint
-      description: Test yaml scripts with actionlint
-      #      additional_dependencies: [actionlint-py==1.6.22.2] # safer, but pre-commit autoupdate will not work
+      description: Lint GitHub workflows with actionlint
       additional_dependencies: [ actionlint-py ]
+      #additional_dependencies: [actionlint-py==1.6.25.2]
+      # safer, but pre-commit autoupdate will not work
+      # note: the versioning scheme is different: not "v1.6.25" but "1.6.25.2" (last number is build system version)
       entry: actionlint
-      #      args: [-ignore "*.set-output. was depracated.*"]
+      #args: [-ignore "*.set-output. was depracated.*"]
       language: python
       types: [ "yaml" ]
       files: "^.github/workflows/"
@@ -52,7 +55,8 @@ or to avoid going twice to internet (might help with proxy):
 
 # Development
 
-Development of wrapper and releasing new version: see [README-DEV.md](./README-DEV.md)
+Development of wrapper and releasing new version:
+see [README-DEV.md](https://github.com/Mateusz-Grzelinski/actionlint-py/blob/main/README-DEV.md)
 
 # Roadmap
 
@@ -60,7 +64,7 @@ Development of wrapper and releasing new version: see [README-DEV.md](./README-D
 - [ ] Upload also binary distribution, not only source distribution
 - [ ] Add unit tests to build system
 
-See [README-DEV.md](./README-DEV.md) for more TODOs.
+See [README-DEV.md](https://github.com/Mateusz-Grzelinski/actionlint-py/blob/main/README-DEV.md) for more TODOs.
 
 Won't do unless asked:
 
