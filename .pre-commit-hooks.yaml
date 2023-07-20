@@ -1,6 +1,6 @@
 - id: actionlint
   name: actionlint
-  description: Test shell scripts with actionlint
+  description: Lint GitHub workflows with actionlint
   entry: actionlint
   language: python
   types: [ "yaml" ]
