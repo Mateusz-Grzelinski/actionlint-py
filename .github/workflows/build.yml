@@ -40,6 +40,7 @@ jobs:
 
       # do not isolate build so that we can query version
       - run: |
+          pip install ".[build-system]"
           python -m build --no-isolation
           VERSION=$(python -m "_custom_build" -v)
           echo "# Test pip install call"

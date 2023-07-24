@@ -25,7 +25,7 @@ jobs:
       - name: Get version
         id: get-version
         run: |
-          pip.exe install ".[build-system]"
+          pip install ".[build-system]"
           echo version=$(python -m "_custom_build" -v) >> $GITHUB_OUTPUT
 #      - name: Get version
 #        id: get-version
