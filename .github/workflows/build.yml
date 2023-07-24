@@ -38,10 +38,10 @@ jobs:
         run: |
           echo "dev."$(cat _custom_build/VERSION_DEV.txt) >> _custom_build/VERSION_BUILD_SYSTEM.txt
 
-      # do not isolate build so that we can query version
       - run: |
-          pip install ".[build-system]"
-          python -m build --no-isolation
+          python -m build
+          # todo ugly, but it is the best we can do to get the version: https://github.com/pypa/pip/issues/11440
+          pip install --editable .
           VERSION=$(python -m "_custom_build" -v)
           echo "# Test pip install call"
           echo "pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --no-deps actionlint-py==$VERSION" >> $GITHUB_STEP_SUMMARY
