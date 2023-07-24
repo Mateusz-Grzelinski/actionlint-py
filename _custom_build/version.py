@@ -16,7 +16,7 @@ with open(os.path.join(_this_dir, "VERSION_ACTIONLINT.txt")) as f:
 
 def main():
     args = ArgumentParser()
-    args.add_argument("--release", help="error if in version contains '.dev.N' string")
+    args.add_argument("--release", help="error if in version contains '.dev.N' string", action="store_true")
     return args.parse_args()
 
 
