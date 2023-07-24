@@ -33,11 +33,6 @@ jobs:
         run: |
           cat _custom_build/VERSION_DEV.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_DEV.txt
 
-      - name: Append dev version
-        # I am simply appending dev version to build system version
-        run: |
-          echo "dev."$(cat _custom_build/VERSION_DEV.txt) >> _custom_build/VERSION_BUILD_SYSTEM.txt
-
       - run: |
           python -m build
           VERSION=$(python ./_custom_build/version.py)

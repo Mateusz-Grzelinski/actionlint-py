@@ -25,7 +25,7 @@ jobs:
       - name: Get version
         id: get-version
         run: |
-          echo version=$(python ./_custom_build/version.py) >> $GITHUB_OUTPUT
+          echo version=$(python ./_custom_build/version.py --release) >> $GITHUB_OUTPUT
 #      - name: Get version
 #        id: get-version
 #        run: |
