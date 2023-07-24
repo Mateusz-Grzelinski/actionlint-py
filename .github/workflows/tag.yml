@@ -17,20 +17,20 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-#      - name: Set up Python
-#        id: set-up-python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: 3.8
-#      - name: Get version
-#        id: get-version
-#        run: |
-#          pip.exe install ".[build-system]"
-#          echo version=$(python -m "_custom_build" -v) >> $GITHUB_OUTPUT
+      - name: Set up Python
+        id: set-up-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
       - name: Get version
         id: get-version
         run: |
-          echo version=v$(cat _custom_build/VERSION_ACTIONLINT.txt) >> $GITHUB_OUTPUT
+          pip.exe install ".[build-system]"
+          echo version=$(python -m "_custom_build" -v) >> $GITHUB_OUTPUT
+#      - name: Get version
+#        id: get-version
+#        run: |
+#          echo version=v$(cat _custom_build/VERSION_ACTIONLINT.txt) >> $GITHUB_OUTPUT
       - name: Git tag version
         run: |
           git tag ${{ steps.get-version.outputs.version }}
