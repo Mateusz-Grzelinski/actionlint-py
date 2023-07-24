@@ -100,6 +100,15 @@ def get_version():
         return r.read().strip()
 
 
+def write_github_output(newest_version, newest_version_str, is_update_required: bool):
+    if GITHUB_OUT is None:
+        return
+    with open(GITHUB_OUT, "a") as file:
+        file.write(f"version={newest_version_str}\n")
+        file.write(f"update_required={is_update_required}\n")
+        file.write(f"release_url={ACTIONLINT_RELEASES}tag/{newest_version}\n")
+
+
 def main():
     links = get_release_page_links()
     newest_release_link = get_newest_release_link(links)
@@ -109,9 +118,7 @@ def main():
     current_version = semver.Version.parse(get_version())
     if newest_version.compare(current_version) != 1:
         log.info("Local version is newest, all good. Exiting.")
-        with open(GITHUB_OUT, "a") as file:
-            file.write(f"version={newest_version_str}\n")
-            file.write(f"update_required=false\n")
+        write_github_output(newest_version, newest_version_str, is_update_required=False)
         exit(0)
     checksum_file_content = get_checksum_file(newest_release_link)
     update_config(checksum_file_content, newest_version_str)
@@ -119,10 +126,7 @@ def main():
     log.warning(
         "Local config updated. A new commit is required, ending with error.",
     )
-    with open(GITHUB_OUT, "a") as file:
-        file.write(f"version={newest_version_str}\n")
-        file.write(f"update_required=true\n")
-        file.write(f"release_url={ACTIONLINT_RELEASES}tag/{newest_version}\n")
+    write_github_output(newest_version, newest_version_str, is_update_required=True)
 
 
 if __name__ == "__main__":
