@@ -33,11 +33,6 @@ jobs:
         run: |
           cat _custom_build/VERSION_DEV.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_DEV.txt
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        if: contains(github.ref, 'release')
-        with:
-          commit_message: Increment dev version
-
       - name: Append dev version
         # I am simply appending dev version to build system version
         run: |
@@ -60,6 +55,12 @@ jobs:
         with:
           name: build
           path: dist/
+
+      # commit only if everything succeeds
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        if: contains(github.ref, 'release')
+        with:
+          commit_message: Increment dev version
 
   publish-to-test:
     name: Publish release to test Pypi
