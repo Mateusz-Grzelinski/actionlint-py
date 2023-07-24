@@ -58,7 +58,7 @@ jobs:
           commit_message: Increment dev version
 
   publish-to-test:
-    name: Publish release to test Pypi
+    name: Publish to test Pypi
     needs: build
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@main
     permissions:
@@ -70,7 +70,7 @@ jobs:
       pypi-token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   publish-to-release:
-    name: Publish release to public Pypi
+    name: Publish to public Pypi
     needs: build
     if: startsWith(github.ref, 'refs/tags') && !contains(github.ref, 'dev') && !contains(github.ref, 'release')
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/release.yml@main
