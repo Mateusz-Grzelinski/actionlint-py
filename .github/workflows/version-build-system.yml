@@ -21,6 +21,9 @@ jobs:
         run: |
           cat _custom_build/VERSION_BUILD_SYSTEM.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_BUILD_SYSTEM.txt
           echo "build_version=$(cat _custom_build/VERSION_BUILD_SYSTEM.txt) >> $GITHUB_OUTPUT
+      - name: Reset dev version
+        run: |
+          echo "0" > _custom_build/VERSION_DEV.txt
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Increment build system version to ${{ steps.build-version.outputs.build_version }}

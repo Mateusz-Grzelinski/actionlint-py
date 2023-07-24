@@ -40,11 +40,9 @@ jobs:
 
       - run: |
           python -m build
-          # todo ugly, but it is the best we can do to get the version: https://github.com/pypa/pip/issues/11440
-          pip install --editable .
-          VERSION=$(python -m "_custom_build" -v)
+          VERSION=$(python ./_custom_build/version.py)
           echo "# Test pip install call"
-          echo "pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --no-deps actionlint-py==$VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ actionlint-py==$VERSION" >> $GITHUB_STEP_SUMMARY
           echo "# Release pip install call"
           echo "pip install --no-deps actionlint-py==$VERSION" >> $GITHUB_STEP_SUMMARY
 
