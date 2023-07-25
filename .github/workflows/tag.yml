@@ -31,11 +31,17 @@ jobs:
             bin:
               - _custom_build/VERSION_ACTIONLINT.txt
               - _custom_build/checksums.cfg
+            dev:
+              - _custom_build/VERSION_DEV.txt
 
       - name: Increment build system version, reset dev version
         if: steps.changes.outputs.build == 'true'
         run: |
           python ./_custom_build/version.py --increment-build
+          python ./_custom_build/version.py --reset-dev
+      - name: Increment build system version, reset dev version
+        if: steps.changes.outputs.dev == 'true'
+        run: |
           python ./_custom_build/version.py --reset-dev
       - name: Get version
         id: get-version
