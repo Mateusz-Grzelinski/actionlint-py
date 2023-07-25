@@ -24,7 +24,7 @@ Sample `.pre-commit-config.yaml`:
 
 ```yaml
 - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
-  rev: v1.6.25.8
+  rev: v1.6.25.9
   hooks:
     - id: actionlint
 ```
@@ -39,9 +39,9 @@ github. It might cause problems with corporate proxy. In case of problems try th
       name: actionlint
       description: Lint GitHub workflows with actionlint
       additional_dependencies: [ actionlint-py ]
-      #additional_dependencies: [actionlint-py==1.6.25.8]
+      #additional_dependencies: [actionlint-py==1.6.25.9]
       # safer, but pre-commit autoupdate will not work
-      # note: the versioning scheme is different: not "v1.6.25" but "1.6.25.2" (last number is build system version)
+      # note: the versioning scheme is different: not "v1.6.25" but "1.6.25.9" (last number is build system version)
       entry: actionlint
       #args: [-ignore "*.set-output. was depracated.*"]
       language: python
