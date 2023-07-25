@@ -31,7 +31,7 @@ jobs:
 
       - name: Increment dev version
         run: |
-          cat _custom_build/VERSION_DEV.txt | tr -d "[:space:]" | awk '{print $1"+1"}' | bc > _custom_build/VERSION_DEV.txt
+          python ./_custom_build/version.py --increment-dev
 
       - run: |
           python -m build
