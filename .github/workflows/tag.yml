@@ -1,5 +1,6 @@
-name: Tag release
+name: Tag and release
 
+# todo write only one tagging action
 on:
   # fix for existing version should be triggered manually
   workflow_dispatch:
@@ -26,11 +27,7 @@ jobs:
         id: get-version
         run: |
           echo version=$(python ./_custom_build/version.py --release) >> $GITHUB_OUTPUT
-#      - name: Get version
-#        id: get-version
-#        run: |
-#          echo version=v$(cat _custom_build/VERSION_ACTIONLINT.txt) >> $GITHUB_OUTPUT
       - name: Git tag version
         run: |
-          git tag ${{ steps.get-version.outputs.version }}
+          git tag v${{ steps.get-version.outputs.version }}
           git push --tags
