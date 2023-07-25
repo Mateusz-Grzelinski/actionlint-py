@@ -62,6 +62,6 @@ jobs:
       id-token: write
       contents: write
     with:
-      upload-mirror: "https://pypi.org/legacy/"
+      upload-mirror: "https://upload.pypi.org/legacy/"
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
