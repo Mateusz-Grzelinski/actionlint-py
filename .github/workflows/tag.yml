@@ -28,9 +28,9 @@ jobs:
               - '_custom_build/**.py'
               - pyproject.toml
               - LICENSE
+              - _custom_build/checksums.cfg
             bin:
               - _custom_build/VERSION_ACTIONLINT.txt
-              - _custom_build/checksums.cfg
             dev:
               - _custom_build/VERSION_DEV.txt
 
