@@ -1,8 +1,9 @@
 name: Tag release
 
 on:
+  # fix for existing version should be triggered manually
   workflow_dispatch:
-    # tag should automatically trigger public release
+  # tag should automatically trigger public release based on new version of actionlint binary
   push:
     branches:
       - main
@@ -18,7 +19,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Set up Python
-        id: set-up-python
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
