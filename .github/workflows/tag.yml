@@ -1,8 +1,9 @@
 name: Tag release
 
 on:
+  # fix for existing version should be triggered manually
   workflow_dispatch:
-    # tag should automatically trigger public release
+  # tag should automatically trigger public release based on new version of actionlint binary
   push:
     branches:
       - main
@@ -17,20 +18,18 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-#      - name: Set up Python
-#        id: set-up-python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: 3.8
-#      - name: Get version
-#        id: get-version
-#        run: |
-#          pip.exe install ".[build-system]"
-#          echo version=$(python -m "_custom_build" -v) >> $GITHUB_OUTPUT
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
       - name: Get version
         id: get-version
         run: |
-          echo version=v$(cat _custom_build/VERSION_ACTIONLINT.txt) >> $GITHUB_OUTPUT
+          echo version=$(python ./_custom_build/version.py --release) >> $GITHUB_OUTPUT
+#      - name: Get version
+#        id: get-version
+#        run: |
+#          echo version=v$(cat _custom_build/VERSION_ACTIONLINT.txt) >> $GITHUB_OUTPUT
       - name: Git tag version
         run: |
           git tag ${{ steps.get-version.outputs.version }}

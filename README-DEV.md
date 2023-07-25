@@ -19,7 +19,7 @@ Workflows take care of:
   to https://pypi.org/project/actionlint-py/
     - public version is set to `python -m "_custom_build" --version`
 - after `release*` branch is merged development version is reset to 0
-  [version-dev.yml](.github/workflows/version-dev.yml)
+  [version-dev.yml](.github/workflows/version-dev-reset.yml)
 - after `release*` branch is merged build system version is incremented
   [version-build-system.yml](.github/workflows/version-build-system.yml)
 - todo: those workflow means I can not write protect main branch...
@@ -27,7 +27,7 @@ Workflows take care of:
 ## Use actionlint from test mirror
 
 ```shell
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --no-deps actionlint-py==1.6.25.3.dev6
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ actionlint-py==1.6.25.3.dev6
 ```
 
 # Change actionlint version
