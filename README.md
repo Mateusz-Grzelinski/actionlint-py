@@ -27,6 +27,10 @@ Sample `.pre-commit-config.yaml`:
   rev: v1.6.25.9
   hooks:
     - id: actionlint
+      additional_dependencies: [pyflakes>=3.0.1, shellcheck-py>=0.9.0.5]
+      # actionlint has built in support for pyflakes and shellcheck, sadly they will not be auto updated. Alternatively:
+      # args: [-shellcheck=/path/shellcheck -pyflakes=/path/pyflakes]
+      # note - invalid path in arguments will fail silently
 ```
 
 Because `actionlint-py` is available as source distribution, pip build system is set up to fetch binary from (public)
