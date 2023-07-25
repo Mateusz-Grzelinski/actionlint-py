@@ -22,7 +22,6 @@ jobs:
         with:
           python-version: 3.8
       - name: Increment build system version, reset dev version
-        id: build-version
         run: |
           python ./_custom_build/version.py --increment-build
           python ./_custom_build/version.py --reset-dev
@@ -34,3 +33,15 @@ jobs:
         with:
           commit_message: Increment build system version to ${{ steps.get-version.outputs.version }}
           tagging_message: v${{ steps.get-version.outputs.version }}
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+
+  build-and-release-to-public:
+    name: Publish to public pypi
+    needs: commit-version-build-system
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/build.yml@main
+    permissions:
+      id-token: write
+      contents: write
+    with:
+      tag: v${{ needs.commit-version-build-system.outputs.version }}

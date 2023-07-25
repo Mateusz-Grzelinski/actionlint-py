@@ -1,4 +1,4 @@
-name: Release to pypi mirror
+name: Upload to pypi mirror
 on:
   workflow_call:
     inputs:
