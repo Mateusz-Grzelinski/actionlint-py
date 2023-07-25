@@ -39,7 +39,7 @@ jobs:
         run: |
           python ./_custom_build/version.py --increment-build
           python ./_custom_build/version.py --reset-dev
-      - name: Increment build system version, reset dev version
+      - name: Reset dev version
         if: steps.changes.outputs.dev == 'true'
         run: |
           python ./_custom_build/version.py --reset-dev
@@ -63,3 +63,4 @@ jobs:
       contents: write
     with:
       tag: v${{ needs.tag.outputs.version }}
+    secrets: inherit

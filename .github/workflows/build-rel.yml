@@ -14,7 +14,7 @@ on:
     inputs:
       tag:
         required: true
-        description: Git tag to checkout
+        description: Git tag (ref) to checkout
         type: string
 jobs:
   build:
