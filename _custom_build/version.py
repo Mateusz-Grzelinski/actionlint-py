@@ -54,15 +54,30 @@ def main():
     return args.parse_args()
 
 
+README = os.path.join(_this_dir, "..", "README.md")
+
+
+def fix_readme(old_version: str, new_version: str):
+    with open(README, "r") as f_r:
+        f_content = f_r.read()
+    with open(README, "w") as f_w:
+        new_f_content = f_content.replace(old_version, new_version)
+        f_w.write(new_f_content)
+
+
 if __name__ == "__main__":
     args = main()
     if args.release and ".dev." in VERSION:
         print(f"ERROR: the version is {VERSION} and should not contain .dev.N")
         exit(1)
+    prev_version = get_version()
     if args.increment_build:
         increment_build_version()
     if args.increment_dev:
         increment_dev_version()
     if args.reset_dev:
         reset_dev_version()
-    print(get_version())
+    current_version = get_version()
+    if prev_version != current_version:
+        fix_readme(prev_version, current_version)
+    print(current_version)

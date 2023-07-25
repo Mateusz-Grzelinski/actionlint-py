@@ -17,6 +17,7 @@ jobs:
       os: macos-latest
       wheel-tags: true
   # todo macos arm architecture is not tested
+  # todo linux arm architecture is not tested
   main-linux:
     uses: asottile/workflows/.github/workflows/tox.yml@v1.0.0
     with:

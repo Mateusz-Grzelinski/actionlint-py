@@ -60,6 +60,7 @@ see [README-DEV.md](https://github.com/Mateusz-Grzelinski/actionlint-py/blob/mai
 
 # Roadmap
 
+- [ ] add `shellcheck-py` as dependency
 - [ ] Update tag in readme in github action when releasing new version
 - [ ] Upload also binary distribution, not only source distribution
 - [ ] Add unit tests to build system

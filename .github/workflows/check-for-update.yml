@@ -31,7 +31,7 @@ jobs:
       - name: Debug prints
         run: |
           echo "# New version: " ${{ steps.check-version.outputs.version }} >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.check-version.outputs.update_required }}
+          echo Update required: ${{ steps.check-version.outputs.update_required }}
           echo "# Status" >> $GITHUB_STEP_SUMMARY
           git status >> $GITHUB_STEP_SUMMARY
           echo "# Diff" >> $GITHUB_STEP_SUMMARY

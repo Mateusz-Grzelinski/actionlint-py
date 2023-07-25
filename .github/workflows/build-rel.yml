@@ -38,10 +38,8 @@ jobs:
       - run: |
           python -m build
           VERSION=$(python ./_custom_build/version.py)
-          echo "# Test pip install call"
-          echo "pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ actionlint-py==$VERSION" >> $GITHUB_STEP_SUMMARY
           echo "# Release pip install call"
-          echo "pip install actionlint-py==$VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "```pip install actionlint-py==$VERSION```" >> $GITHUB_STEP_SUMMARY
 
       - run: |
           echo "# Twine check" >> $GITHUB_STEP_SUMMARY
