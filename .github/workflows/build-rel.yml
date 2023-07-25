@@ -1,15 +1,9 @@
-name: Build and optionally trigger release
+name: Build public release
 on:
-  pull_request:
+  push:
     # only PR to main
-    branches:
-      - main
-#  push:
-#    # only tagged commit on main can trigger prod release
-#    branches:
-#      - main
-#    tags:
-#      - v*
+    tags:
+      - v*
   workflow_dispatch:
     inputs:
       tag:
@@ -41,11 +35,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - name: Increment dev version
-        if: ${{ inputs.tag }} == ''
-        run: |
-          python ./_custom_build/version.py --increment-dev
-
       - run: |
           python -m build
           VERSION=$(python ./_custom_build/version.py)
@@ -64,28 +53,10 @@ jobs:
           name: build
           path: dist/
 
-      # commit only if everything succeeds
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        if: ${{ inputs.tag }} == ''
-        with:
-          commit_message: Increment dev version
-
-  publish-to-test:
-    name: Publish to test Pypi
-    needs: build
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/upload.yml@main
-    permissions:
-      id-token: write
-      contents: write
-    with:
-      upload-mirror: "https://test.pypi.org/legacy/"
-    secrets:
-      pypi-token: ${{ secrets.TEST_PYPI_API_TOKEN }}
-
   publish-to-release:
     name: Publish to public Pypi
     needs: build
-    if: startsWith(github.ref, 'refs/tags') && !contains(github.ref, 'dev') && !contains(github.ref, 'release')
+#    if: startsWith(github.ref, 'refs/tags') && !contains(github.ref, 'dev') && !contains(github.ref, 'release')
     uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/upload.yml@main
     permissions:
       id-token: write

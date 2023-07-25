@@ -1,6 +1,5 @@
 name: Tag and release
 
-# todo write only one tagging action
 on:
   # fix for existing version should be triggered manually
   workflow_dispatch:
@@ -9,9 +8,11 @@ on:
     branches:
       - main
     paths:
-      - _custom_build/VERSION_ACTIONLINT.txt
+      - _custom_build/**
+      - pyproject.toml
+      - LICENSE
 jobs:
-  tag-relase:
+  tag:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -19,15 +20,40 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: dorny/paths-filter@v2
+        id: changes
         with:
-          python-version: 3.8
+          filters: |
+            build:
+              - '_custom_build/**.py'
+              - pyproject.toml
+              - LICENSE
+            bin:
+              - _custom_build/VERSION_ACTIONLINT.txt
+              - _custom_build/checksums.cfg
+
+      - name: Increment build system version, reset dev version
+        if: steps.changes.outputs.build == 'true'
+        run: |
+          python ./_custom_build/version.py --increment-build
+          python ./_custom_build/version.py --reset-dev
       - name: Get version
         id: get-version
         run: |
           echo version=$(python ./_custom_build/version.py --release) >> $GITHUB_OUTPUT
-      - name: Git tag version
-        run: |
-          git tag v${{ steps.get-version.outputs.version }}
-          git push --tags
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Increment build system version to ${{ steps.get-version.outputs.version }}
+          tagging_message: v${{ steps.get-version.outputs.version }}
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+
+  build-and-release-to-public:
+    name: Publish to public pypi
+    needs: tag
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/build-rel.yml@main
+    permissions:
+      id-token: write
+      contents: write
+    with:
+      tag: v${{ needs.tag.outputs.version }}

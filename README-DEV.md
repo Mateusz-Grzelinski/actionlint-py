@@ -1,6 +1,6 @@
 # Workflows
 
-Workflows take care of:
+Workflows take care of (todo update):
 
 - checking for updates every day: [check-for-update.yml](.github/workflows/check-for-update.yml)
   and [auto_update_main.py](_custom_build/auto_update_main.py)
@@ -8,13 +8,13 @@ Workflows take care of:
   in [tag.yml](.github/workflows/tag.yml)
     - todo: it is not ideal that pip version and tag is different...
 - making a test release using version on branch `release*`
-  [build.yml](.github/workflows/build.yml) and
+  [build.yml](.github/workflows/build-dev.yml) and
   [release.yml](.github/workflows/upload.yml) and publishing it
   to https://test.pypi.org/project/actionlint-py/#history
     - test version is set to `python -m "_custom_build" --version` + `.devN` (development version is updated
       automatically when PR is created)
 - making a public release using version _custom_build/VERSION_ACTIONLINT.txt
-  [build.yml](.github/workflows/build.yml) and
+  [build.yml](.github/workflows/build-dev.yml) and
   [release.yml](.github/workflows/upload.yml) and publishing it
   to https://pypi.org/project/actionlint-py/
     - public version is set to `python -m "_custom_build" --version`
