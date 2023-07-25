@@ -53,7 +53,6 @@ jobs:
 
       # commit only if everything succeeds
       - uses: stefanzweifel/git-auto-commit-action@v4
-        if: contains(github.ref, 'release')
         with:
           commit_message: Increment dev version
 
