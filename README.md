@@ -18,23 +18,30 @@ environment (or `actionlint.exe` on windows).
 
 ### As a pre-commit hook
 
-See [pre-commit] for instructions
+See [pre-commit] for introduction.
+**I recommend using officially supported pre-commit hooks from actionlint itself**
 
-Sample `.pre-commit-config.yaml`:
+See docs: https://github.com/rhysd/actionlint/blob/main/docs/usage.md#pre-commit
+
+Use this repo if you can not use officially supported hooks (docker, golang, system) and you are fine with python `pip`
+wrapper.
+
+Sample `.pre-commit-config.yaml` using `pip` as package manager:
 
 ```yaml
 - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
   rev: v1.6.25.9
   hooks:
     - id: actionlint
-      additional_dependencies: [pyflakes>=3.0.1, shellcheck-py>=0.9.0.5]
+      additional_dependencies: [ pyflakes>=3.0.1, shellcheck-py>=0.9.0.5 ]
       # actionlint has built in support for pyflakes and shellcheck, sadly they will not be auto updated. Alternatively:
       # args: [-shellcheck=/path/shellcheck -pyflakes=/path/pyflakes]
       # note - invalid path in arguments will fail silently
 ```
 
 Because `actionlint-py` is available as source distribution, pip build system is set up to fetch binary from (public)
-github. It might cause problems with corporate proxy. In case of problems try this semi-manual setup:
+github. It might cause problems with corporate proxy. In case of problems try this semi-manual setup that respects
+your `pip.ini`:
 
 ```yaml
 - repo: local
@@ -57,6 +64,61 @@ github. It might cause problems with corporate proxy. In case of problems try th
 
 [pre-commit]: https://pre-commit.com
 
+## Alternative methods of running actionlint
+
+### As pre-commit hooks
+
+See [official docs for pre-commit integration](https://github.com/rhysd/actionlint/blob/main/docs/usage.md#pre-commit)
+
+```yaml
+- repo: https://github.com/rhysd/actionlint
+  rev: v1.6.25
+  hooks:
+    - id: actionlint
+    # - id: actionlint-docker
+    # - id: actionlint-system
+```
+
+### Use as github action step
+
+Use directly in github action, see
+[official docs for github action integration](https://github.com/rhysd/actionlint/blob/main/docs/usage.md#use-actionlint-on-github-actions):
+
+```yaml
+name: Lint GitHub Actions workflows
+on: [ push, pull_request ]
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download actionlint
+        id: get_actionlint
+        run: bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
+        shell: bash
+      - name: Check workflow files
+        run: ${{ steps.get_actionlint.outputs.executable }} -color
+        shell: bash
+```
+
+Or using docker:
+
+```yaml
+name: Lint GitHub Actions workflows
+on: [ push, pull_request ]
+
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check workflow files
+        uses: docker://rhysd/actionlint:latest
+        with:
+          args: -color
+```
+
 # Development
 
 Development of wrapper and releasing new version:
@@ -64,8 +126,11 @@ see [README-DEV.md](https://github.com/Mateusz-Grzelinski/actionlint-py/blob/mai
 
 # Roadmap
 
-- [ ] add `shellcheck-py` as dependency
-- [ ] Update tag in readme in github action when releasing new version
+- [x] Add actionlint hook as docker
+    - [x] support `shellcheck-py` in docker image
+    - [ ] auto update docker version in `.pre-commit-hooks.yaml` when using `_custom_build/auto_update_main.py`
+- [x] add `shellcheck-py` as dependency (or at least document)
+- [x] Update tag in readme in github action when releasing new version
 - [ ] Upload also binary distribution, not only source distribution
 - [ ] Add unit tests to build system
 
