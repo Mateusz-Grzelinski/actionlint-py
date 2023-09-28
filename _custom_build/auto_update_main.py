@@ -107,7 +107,7 @@ def write_github_output(newest_version, newest_version_str, is_update_required: 
     with open(GITHUB_OUT, "a") as file:
         file.write(f"version={newest_version_str}\n")
         file.write(f"update_required={is_update_required}\n")
-        file.write(f"release_url={ACTIONLINT_RELEASES}tag/{newest_version}\n")
+        file.write(f"release_url={ACTIONLINT_RELEASES}tag/v{newest_version}\n")
 
 
 def main():
