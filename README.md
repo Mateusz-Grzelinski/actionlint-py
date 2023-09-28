@@ -1,3 +1,6 @@
+> Note: for `pre-commit` hooks I recommend officially supported hooks:
+> See docs: https://github.com/rhysd/actionlint/blob/main/docs/usage.md#pre-commit
+
 # actionlint-py
 
 A python wrapper to provide a pip-installable [actionlint] binary.
