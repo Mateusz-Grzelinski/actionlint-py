@@ -5,17 +5,17 @@ Workflows take care of (todo update):
 - checking for updates every day: [check-for-update.yml](.github/workflows/check-for-update.yml)
   and [auto_update_main.py](_custom_build/auto_update_main.py)
 - tagging a git commit using only version in file: `_custom_build/VERSION_ACTIONLINT.txt`
-  in [tag.yml](.github/workflows/tag.yml)
+  in [tag.yml](.github/workflows/tag-and-release.yml)
     - todo: it is not ideal that pip version and tag is different...
 - making a test release using version on branch `release*`
-  [build.yml](.github/workflows/build-dev.yml) and
-  [release.yml](.github/workflows/upload.yml) and publishing it
+  [build.yml](.github/workflows/build-test-release.yml) and
+  [release.yml](.github/workflows/upload-to-pypi.yml) and publishing it
   to https://test.pypi.org/project/actionlint-py/#history
     - test version is set to `python -m "_custom_build" --version` + `.devN` (development version is updated
       automatically when PR is created)
 - making a public release using version _custom_build/VERSION_ACTIONLINT.txt
-  [build.yml](.github/workflows/build-dev.yml) and
-  [release.yml](.github/workflows/upload.yml) and publishing it
+  [build.yml](.github/workflows/build-test-release.yml) and
+  [release.yml](.github/workflows/upload-to-pypi.yml) and publishing it
   to https://pypi.org/project/actionlint-py/
     - public version is set to `python -m "_custom_build" --version`
 - after `release*` branch is merged development version is reset to 0
@@ -26,8 +26,10 @@ Workflows take care of (todo update):
 
 ## Use actionlint from test mirror
 
+Specify precise version of use `--pre`, or both :)
+
 ```shell
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ actionlint-py==1.6.25.3.dev6
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --pre actionlint-py==1.6.25.3.dev6
 ```
 
 # Change actionlint version

@@ -1,3 +1,5 @@
+# only run on master and if package files changed
+# bump build system version and publish package
 name: Tag and release
 
 on:
@@ -64,7 +66,7 @@ jobs:
   build-and-release-to-public:
     name: Publish to public pypi
     needs: tag
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/build-rel.yml@main
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/buildpublic-release.yml@main
     permissions:
       id-token: write
       contents: write
