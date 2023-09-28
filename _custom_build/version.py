@@ -9,7 +9,7 @@ VERSION_DEV_TXT = os.path.join(_this_dir, "VERSION_DEV.txt")
 GITHUB_OUT = os.getenv("GITHUB_OUTPUT")
 
 
-def get_version():
+def get_pip_version():
     global VERSION
     with open(VERSION_ACTIONLINT_TXT) as f:
         # VERSION_BUILD_SYSTEM.txt is version of this build system
@@ -23,7 +23,12 @@ def get_version():
                 return v
 
 
-VERSION = get_version()
+def get_actionlint_version():
+    with open(VERSION_ACTIONLINT_TXT) as r:
+        return r.read().strip()
+
+
+VERSION = get_pip_version()
 
 
 def increment_build_version():
@@ -70,14 +75,14 @@ if __name__ == "__main__":
     if args.release and ".dev." in VERSION:
         print(f"ERROR: the version is {VERSION} and should not contain .dev.N")
         exit(1)
-    prev_version = get_version()
+    prev_version = get_pip_version()
     if args.increment_build:
         increment_build_version()
     if args.increment_dev:
         increment_dev_version()
     if args.reset_dev:
         reset_dev_version()
-    current_version = get_version()
+    current_version = get_pip_version()
     if prev_version != current_version:
         fix_readme(prev_version, current_version)
     print(current_version)

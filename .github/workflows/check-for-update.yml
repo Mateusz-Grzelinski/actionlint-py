@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     outputs:
       version: ${{ steps.check-version.outputs.version }}
       update_required: ${{ steps.check-version.outputs.update_required }}
@@ -26,20 +27,22 @@ jobs:
 
       - run: python ./_custom_build/auto_update_main.py
         id: check-version
-        continue-on-error: true
+#        continue-on-error: true
 
       - name: Debug prints
         run: |
-          echo "# New version: " ${{ steps.check-version.outputs.version }} >> $GITHUB_STEP_SUMMARY
-          echo Update required: ${{ steps.check-version.outputs.update_required }}
-          echo "# Status" >> $GITHUB_STEP_SUMMARY
-          git status >> $GITHUB_STEP_SUMMARY
-          echo "# Diff" >> $GITHUB_STEP_SUMMARY
-          git diff >> $GITHUB_STEP_SUMMARY
-#      - uses: stefanzweifel/git-auto-commit-action@v4
-#        with:
-#          commit_message: New release ${{ steps.check-version.outputs.version }}
-#          tagging_message: v${{ steps.check-version.outputs.version }}
+          {
+          echo "# New version: ${{ steps.check-version.outputs.version }} "
+          echo "Update required: ${{ steps.check-version.outputs.update_required }}"
+          echo "# Status"
+          echo '```sh'
+          git status
+          echo '```'
+          echo "# Diff"
+          echo '```sh'
+          git diff
+          echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Create Pull Request
         if: steps.check-version.outputs.update_required == 'true'
         uses: peter-evans/create-pull-request@v5.0.2
