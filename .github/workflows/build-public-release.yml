@@ -1,3 +1,4 @@
+# this job does not increment versions, just plain build and publish
 name: Build public release
 on:
   push:
@@ -39,11 +40,13 @@ jobs:
           python -m build
           VERSION=$(python ./_custom_build/version.py)
           echo "# Release pip install call"
-          echo "```pip install actionlint-py==$VERSION```" >> $GITHUB_STEP_SUMMARY
+          echo '```pip install actionlint-py=='"$VERSION"'```' >> "$GITHUB_STEP_SUMMARY"
 
       - run: |
-          echo "# Twine check" >> $GITHUB_STEP_SUMMARY
-          python -m twine check dist/* >> $GITHUB_STEP_SUMMARY
+          {
+          echo "# Twine check"
+          python -m twine check dist/*
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload package distributions
         uses: actions/upload-artifact@v3
@@ -54,8 +57,8 @@ jobs:
   publish-to-release:
     name: Publish to public Pypi
     needs: build
-#    if: startsWith(github.ref, 'refs/tags') && !contains(github.ref, 'dev') && !contains(github.ref, 'release')
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/upload.yml@main
+    #    if: startsWith(github.ref, 'refs/tags') && !contains(github.ref, 'dev') && !contains(github.ref, 'release')
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/upload-to-pypi.yml@main
     permissions:
       id-token: write
       contents: write

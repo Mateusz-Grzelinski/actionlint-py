@@ -1,3 +1,4 @@
+# this job increments dev version, builds and publishes a test package
 name: Build test release
 on:
   pull_request:
@@ -30,12 +31,16 @@ jobs:
       - run: |
           python -m build
           VERSION=$(python ./_custom_build/version.py)
+          {
           echo "# Test pip install call"
-          echo "```pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ actionlint-py==$VERSION```" >> $GITHUB_STEP_SUMMARY
+          echo '```pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ --pre actionlint-py=='"$VERSION"'```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - run: |
-          echo "# Twine check" >> $GITHUB_STEP_SUMMARY
-          python -m twine check dist/* >> $GITHUB_STEP_SUMMARY
+          {
+          echo "# Twine check"
+          python -m twine check dist/*
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload package distributions
         uses: actions/upload-artifact@v3
@@ -51,7 +56,7 @@ jobs:
   publish-to-test:
     name: Publish to test Pypi
     needs: build
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/upload.yml@main
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/upload-to-pypi.yml@main
     permissions:
       id-token: write
       contents: write
