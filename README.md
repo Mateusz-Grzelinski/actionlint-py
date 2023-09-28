@@ -30,7 +30,7 @@ Sample `.pre-commit-config.yaml` using `pip` as package manager:
 
 ```yaml
 - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
-  rev: v1.6.25.9.dev.4
+  rev: v1.6.25.9.dev.5
   hooks:
     - id: actionlint
       additional_dependencies: [ pyflakes>=3.0.1, shellcheck-py>=0.9.0.5 ]
@@ -50,9 +50,9 @@ your `pip.ini`:
       name: actionlint
       description: Lint GitHub workflows with actionlint
       additional_dependencies: [ actionlint-py ]
-      #additional_dependencies: [actionlint-py==1.6.25.9.dev.4]
+      #additional_dependencies: [actionlint-py==1.6.25.9.dev.5]
       # safer, but pre-commit autoupdate will not work
-      # note: the versioning scheme is different: not "v1.6.25" but "1.6.25.9.dev.4" (last number is build system version)
+      # note: the versioning scheme is different: not "v1.6.25" but "1.6.25.9.dev.5" (last number is build system version)
       entry: actionlint
       #args: [-ignore "*.set-output. was depracated.*"]
       language: python
