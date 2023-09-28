@@ -41,7 +41,7 @@ def get_newest_release_link(links: Iterable[str]) -> str:
     return newest_release_link
 
 
-def update_config(checksum_file_content: str, newest_version_str: str) -> None:
+def update_config(checksum_file_content: str, current_version: str, newest_version_str: str) -> None:
     """Update tag and checksum in config file
 
     Config file format:
@@ -58,10 +58,11 @@ def update_config(checksum_file_content: str, newest_version_str: str) -> None:
     checksums: dict[str, ChecksumInfo] = {c.filename: c for c in get_checksums(checksum_file_content)}
     for sec in config.sections():
         platform_config = config[sec]
-        file_name = platform_config["file_name"]
-        url = f"https://github.com/rhysd/actionlint/releases/download/" f"v{newest_version_str}/{file_name}"
+        new_file_name = platform_config["file_name"].replace(current_version, newest_version_str)
+        platform_config["file_name"] = new_file_name
+        url = f"https://github.com/rhysd/actionlint/releases/download/v{newest_version_str}/{new_file_name}"
         platform_config["url"] = url
-        platform_config["checksum"] = checksums[file_name].checksum
+        platform_config["checksum"] = checksums[new_file_name].checksum
 
     with open(SETUP_CFG, "w") as file:
         config.write(file, space_around_delimiters=True)
@@ -121,11 +122,10 @@ def main():
         write_github_output(newest_version, newest_version_str, is_update_required=False)
         exit(0)
     checksum_file_content = get_checksum_file(newest_release_link)
-    update_config(checksum_file_content, newest_version_str)
+    update_config(checksum_file_content, str(current_version), newest_version_str)
     update_version(newest_version_str)
-    log.warning(
-        "Local config updated. A new commit is required, ending with error.",
-    )
+    log.info("Local file 'checksums.cfg' and 'VERSION_ACTIONLINT.txt' updated successfully. ")
+    log.warning("A new commit is required.")
     write_github_output(newest_version, newest_version_str, is_update_required=True)
 
 

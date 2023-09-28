@@ -26,16 +26,18 @@ jobs:
 
       - run: python ./_custom_build/auto_update_main.py
         id: check-version
-        continue-on-error: true
+#        continue-on-error: true
 
       - name: Debug prints
         run: |
-          echo "# New version: " ${{ steps.check-version.outputs.version }} >> $GITHUB_STEP_SUMMARY
-          echo Update required: ${{ steps.check-version.outputs.update_required }}
-          echo "# Status" >> $GITHUB_STEP_SUMMARY
-          git status >> $GITHUB_STEP_SUMMARY
-          echo "# Diff" >> $GITHUB_STEP_SUMMARY
-          git diff >> $GITHUB_STEP_SUMMARY
+          {
+          echo "# New version: ${{ steps.check-version.outputs.version }} "
+          echo "Update required: ${{ steps.check-version.outputs.update_required }}"
+          echo "# Status"
+          git status
+          echo "# Diff"
+          git diff
+          } >> "$GITHUB_STEP_SUMMARY"
 #      - uses: stefanzweifel/git-auto-commit-action@v4
 #        with:
 #          commit_message: New release ${{ steps.check-version.outputs.version }}
