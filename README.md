@@ -32,7 +32,7 @@ Sample `.pre-commit-config.yaml` using `pip` as package manager:
 
 ```yaml
 - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
-  rev: v1.6.25.9
+  rev: v1.6.26.10.dev.1
   hooks:
     - id: actionlint
       additional_dependencies: [ pyflakes>=3.0.1, shellcheck-py>=0.9.0.5 ]
@@ -52,9 +52,9 @@ your `pip.ini`:
       name: actionlint
       description: Lint GitHub workflows with actionlint
       additional_dependencies: [ actionlint-py ]
-      #additional_dependencies: [actionlint-py==1.6.25.9]
+      #additional_dependencies: [actionlint-py==1.6.26.10.dev.1]
       # safer, but pre-commit autoupdate will not work
-      # note: the pip versioning scheme is different from actionlint binary: not "v1.6.25" but "1.6.25.9" (last number is build system version)
+      # note: the pip versioning scheme is different from actionlint binary: not "v1.6.26" but "1.6.26.10.dev.1" (last number is build system version)
       entry: actionlint
       #args: [-ignore "*.set-output. was depracated.*"]
       language: python
@@ -74,7 +74,7 @@ See [official docs for pre-commit integration](https://github.com/rhysd/actionli
 
 ```yaml
 - repo: https://github.com/rhysd/actionlint
-  rev: v1.6.25
+  rev: v1.6.26
   hooks:
     - id: actionlint
     # - id: actionlint-docker
