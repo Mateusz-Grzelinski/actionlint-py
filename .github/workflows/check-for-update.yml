@@ -27,11 +27,17 @@ jobs:
 
       - run: python ./_custom_build/auto_update_main.py
         id: check-version
-#        continue-on-error: true
+
+      - run: |
+          git fetch origin release-v${{ steps.check-version.outputs.version }}:release-v${{ steps.check-version.outputs.version }}
+          git remote -v
+          git log
+        continue-on-error: true
 
       - name: Debug prints
         run: |
           {
+          git branch
           echo "# New version: ${{ steps.check-version.outputs.version }} "
           echo "Update required: ${{ steps.check-version.outputs.update_required }}"
           echo "# Status"
