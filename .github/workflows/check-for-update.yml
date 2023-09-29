@@ -31,7 +31,6 @@ jobs:
       - name: Abort if branch exists to avoid force push
         id: abort-pr
         run: |
-          set -u
           BRANCH=release-v${{ steps.check-version.outputs.version }}
           if git fetch origin "$BRANCH:$BRANCH" ; then
             echo "Aborting to avoid force push" | tee "$GITHUB_SUMMARY"
