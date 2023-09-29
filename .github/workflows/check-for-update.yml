@@ -29,12 +29,16 @@ jobs:
         id: check-version
 
       - name: Abort if branch exists to avoid force push
+        id: abort-pr
         run: |
           if git fetch origin release-v${{ steps.check-version.outputs.version }}:release-v${{ steps.check-version.outputs.version }} ; then
+            echo "Aborting to avoid force push"
             exit 1;
           else
+            echo "Branch can and should be created"
             exit 0;
           fi
+        continue-on-error: true
 
       - name: Debug prints
         run: |
@@ -52,7 +56,7 @@ jobs:
           echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Create Pull Request
-        if: steps.check-version.outputs.update_required == 'true'
+        if: steps.check-version.outputs.update_required == 'true' && steps.abort-pr.conclusion == 'success'
         uses: peter-evans/create-pull-request@v5.0.2
         with:
           title: New release v${{ steps.check-version.outputs.version }}
