@@ -31,14 +31,15 @@ jobs:
       - name: Abort if branch exists to avoid force push
         id: abort-pr
         run: |
-          if git fetch origin release-v${{ steps.check-version.outputs.version }}:release-v${{ steps.check-version.outputs.version }} ; then
-            echo "Aborting to avoid force push"
+          set -u
+          BRANCH=release-v${{ steps.check-version.outputs.version }}
+          if git fetch origin "$BRANCH:$BRANCH" ; then
+            echo "Aborting to avoid force push" >> "$GITHUB_SUMMARY"
             exit 1;
           else
-            echo "Branch can and should be created"
+            echo "Branch '$BRANCH' can and should be created" >> "$GITHUB_SUMMARY"
             exit 0;
           fi
-        continue-on-error: true
 
       - name: Debug prints
         run: |
@@ -61,7 +62,12 @@ jobs:
         with:
           title: New release v${{ steps.check-version.outputs.version }}
           body: |
-            Files `_custom_build/checksums.cfg` and `_custom_build/VERSION_ACTIONLINT.txt` were updated.
+            PR created by workflow `.github/workflows/check-for-update.yaml`
+
+            Files `_custom_build/checksums.cfg` and `_custom_build/VERSION_ACTIONLINT.txt` (and other) were updated.
+
+            - [ ] check if checksums are corrent
+            - [ ] check if url download links are correct
 
             See release: ${{ steps.check-version.outputs.release_url }}
           commit-message: |
