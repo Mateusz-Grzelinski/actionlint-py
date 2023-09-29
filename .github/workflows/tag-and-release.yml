@@ -66,7 +66,7 @@ jobs:
   build-and-release-to-public:
     name: Publish to public pypi
     needs: tag
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/buildpublic-release.yml@main
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/build-public-release.yml@main
     permissions:
       id-token: write
       contents: write
