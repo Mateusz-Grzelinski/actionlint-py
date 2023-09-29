@@ -1,3 +1,6 @@
+> Note: for `pre-commit` hooks I recommend officially supported hooks:
+> See docs: https://github.com/rhysd/actionlint/blob/main/docs/usage.md#pre-commit
+
 # actionlint-py
 
 A python wrapper to provide a pip-installable [actionlint] binary.
@@ -14,32 +17,31 @@ pip install actionlint-py
 ### Usage
 
 After installation, the `actionlint` binary should be available in your
-environment (or `actionlint.exe` on windows).
+environment (or `actionlint.exe` on windows). Remember to add you `Scripts` folder to `PATH`.
 
 ### As a pre-commit hook
 
 See [pre-commit] for introduction.
-**I recommend using officially supported pre-commit hooks from actionlint itself**
 
+**I recommend using officially supported pre-commit hooks from actionlint itself**
 See docs: https://github.com/rhysd/actionlint/blob/main/docs/usage.md#pre-commit
 
-Use this repo if you can not use officially supported hooks (docker, golang, system) and you are fine with python `pip`
-wrapper.
+Use this repo if you can not use officially supported hooks (docker, golang, system) and you are fine with python `pip` wrapper.
 
 Sample `.pre-commit-config.yaml` using `pip` as package manager:
 
 ```yaml
 - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
-  rev: v1.6.25.9.dev.5
+  rev: v1.6.25.9
   hooks:
     - id: actionlint
       additional_dependencies: [ pyflakes>=3.0.1, shellcheck-py>=0.9.0.5 ]
-      # actionlint has built in support for pyflakes and shellcheck, sadly they will not be auto updated. Alternatively:
+      # actionlint has built in support for pyflakes and shellcheck, sadly they will not be auto updated. Check https://pypi.org/project/actionlint-py/ for latest version. Alternatively:
       # args: [-shellcheck=/path/shellcheck -pyflakes=/path/pyflakes]
       # note - invalid path in arguments will fail silently
 ```
 
-Because `actionlint-py` is available as source distribution, pip build system is set up to fetch binary from (public)
+Because `actionlint-py` is available as source distribution, pip build system will fetch binary from (public)
 github. It might cause problems with corporate proxy. In case of problems try this semi-manual setup that respects
 your `pip.ini`:
 
@@ -50,9 +52,9 @@ your `pip.ini`:
       name: actionlint
       description: Lint GitHub workflows with actionlint
       additional_dependencies: [ actionlint-py ]
-      #additional_dependencies: [actionlint-py==1.6.25.9.dev.5]
+      #additional_dependencies: [actionlint-py==1.6.25.9]
       # safer, but pre-commit autoupdate will not work
-      # note: the versioning scheme is different: not "v1.6.25" but "1.6.25.9.dev.5" (last number is build system version)
+      # note: the pip versioning scheme is different from actionlint binary: not "v1.6.25" but "1.6.25.9" (last number is build system version)
       entry: actionlint
       #args: [-ignore "*.set-output. was depracated.*"]
       language: python

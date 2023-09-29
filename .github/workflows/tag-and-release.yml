@@ -1,3 +1,5 @@
+# only run on master and if package files changed
+# bump build system version and publish package
 name: Tag and release
 
 on:
@@ -42,10 +44,10 @@ jobs:
       - name: Increment build system version, reset dev version
         if: steps.changes.outputs.build == 'true'
         run: |
-          echo "Previous version: $(python ./_custom_build/version.py)" >> "$GITHUB_SUMMARY"
+          echo "Previous version: $(python ./_custom_build/version.py)" | tee "$GITHUB_SUMMARY"
           python ./_custom_build/version.py --increment-build
           python ./_custom_build/version.py --reset-dev
-          echo "Current version: $(python ./_custom_build/version.py)" >> "$GITHUB_SUMMARY"
+          echo "Current version: $(python ./_custom_build/version.py)" | tee "$GITHUB_SUMMARY"
       - name: Reset dev version
         if: steps.changes.outputs.dev == 'true'
         run: |
@@ -53,7 +55,7 @@ jobs:
       - name: Get version
         id: get-version
         run: |
-          echo "version=$(python ./_custom_build/version.py --release)" >> "$GITHUB_OUTPUT"
+          echo "version=$(python ./_custom_build/version.py --release)" | tee "$GITHUB_OUTPUT"
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Increment build system version to ${{ steps.get-version.outputs.version }}
@@ -64,7 +66,7 @@ jobs:
   build-and-release-to-public:
     name: Publish to public pypi
     needs: tag
-    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/build-rel.yml@main
+    uses: Mateusz-Grzelinski/actionlint-py/.github/workflows/buildpublic-release.yml@main
     permissions:
       id-token: write
       contents: write
