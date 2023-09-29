@@ -33,10 +33,10 @@ jobs:
         run: |
           BRANCH=release-v${{ steps.check-version.outputs.version }}
           if git fetch origin "$BRANCH:$BRANCH" ; then
-            echo "Aborting to avoid force push" | tee "$GITHUB_SUMMARY"
+            echo "Aborting to avoid force push"
             exit 1;
           else
-            echo "Branch '$BRANCH' can and should be created" >> "$GITHUB_SUMMARY"
+            echo "Branch '$BRANCH' can and should be created"
             exit 0;
           fi
 
