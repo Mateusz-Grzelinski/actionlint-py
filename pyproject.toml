@@ -33,7 +33,7 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["black"]
-auto_update = ["requests", "semver", "requests_html"]
+auto_update = ["requests", "semver", "requests_html", "lxml[html_clean]"]
 
 [project.urls]
 "Homepage" = "https://github.com/Mateusz-Grzelinski/actionlint-py"
