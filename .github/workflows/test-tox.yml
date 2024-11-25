@@ -2,6 +2,7 @@ name: Test (tox)
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   main-windows:
