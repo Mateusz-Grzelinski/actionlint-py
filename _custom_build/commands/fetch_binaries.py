@@ -12,6 +12,13 @@ from ..utils.file_ops import save_executable
 SETUP_CFG = os.path.join(os.path.dirname(__file__), "..", "checksums.cfg")
 
 
+def get_architecture():
+    if platform.machine().lower() == "aarch64":
+        return "arm64"
+
+    return platform.machine()
+
+
 class fetch_binaries(Command):
     description = "fetch binaries based on config in checksums.cfg"
     build_temp = None
@@ -27,7 +34,7 @@ class fetch_binaries(Command):
         # save binary to self.build_temp
         config = configparser.ConfigParser()
         config.read(SETUP_CFG)
-        section = sys.platform + "-" + platform.machine()
+        section = sys.platform + "-" + get_architecture()
         url = config[section]["url"]
         sha256 = config[section]["checksum"]
         archive = download(url, sha256)
