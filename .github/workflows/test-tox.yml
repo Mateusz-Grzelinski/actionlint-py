@@ -14,7 +14,7 @@ jobs:
     uses: asottile/workflows/.github/workflows/tox.yml@v1.0.0
     with:
       env: '["py38"]'
-      os: macos-latest
+      os: macos-13
       wheel-tags: true
   # todo macos arm architecture is not tested
   # todo linux arm architecture is not tested
