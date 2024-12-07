@@ -20,7 +20,7 @@ jobs:
         id: set-up-python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.12
       - run: |
           python -m pip install --upgrade pip
           pip install ".[auto_update]"
