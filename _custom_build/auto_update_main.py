@@ -2,12 +2,13 @@ import configparser
 import logging
 import os
 from dataclasses import dataclass
-from typing import Iterable
-from version import VERSION_ACTIONLINT_TXT, reset_dev_version, get_actionlint_version, get_pip_version, VERSION
+from typing import Iterable, Optional, Tuple
 
 import requests
 import semver
 from requests_html import HTMLSession
+
+from version import VERSION_ACTIONLINT_TXT, reset_dev_version, get_actionlint_version, get_pip_version, VERSION
 
 README_MD = os.path.join(os.path.dirname(__file__), "..", "README.md")
 assert os.path.isfile(README_MD), (os.getcwd(), README_MD)
@@ -27,20 +28,29 @@ def get_release_page_links():
 
 
 def get_checksum_file(newest_release_link: str) -> str:
-    checksums_file = requests.get("https://github.com" + newest_release_link)
-    # checksum_file_name = newest_release_link.split('/')[-1]
+    checksum_link = "https://github.com/rhysd/actionlint/releases/download/v" + newest_release_link + "/actionlint_" + newest_release_link + "_checksums.txt"
+    checksums_file = requests.get(checksum_link)
     content = checksums_file.content.decode("utf-8")
     return content
 
 
-def get_newest_release_link(links: Iterable[str]) -> str:
-    newest_release_link = None
+def get_next_release_link(links: Iterable[str], current_version: semver.Version) -> Optional[Tuple[str, str]]:
+    """Get next available version."""
+    all_versions = []
     for link in links:
         link: str
-        if link.endswith("_checksums.txt"):
-            newest_release_link = link
-            break
-    return newest_release_link
+        if link.startswith("/rhysd/actionlint/tree/v"):
+            all_versions.append(link)
+
+    versions_with_links = [(s.split("/")[-1].lstrip("v"), s) for s in all_versions]
+    sorted_versions = sorted(
+        versions_with_links,
+        key=lambda x: semver.VersionInfo.parse(x[0])
+    )
+    for v in sorted_versions:
+        if current_version < semver.VersionInfo.parse(v[0]):
+            return v
+    return None
 
 
 def update_config(checksum_file_content: str, current_version: str, newest_version_str: str) -> None:
@@ -120,22 +130,25 @@ def write_github_output(newest_version, newest_version_str, is_update_required: 
 
 def main():
     links = get_release_page_links()
-    newest_release_link = get_newest_release_link(links)
-    newest_version_str = newest_release_link.split("/")[-2].lstrip("v")
-    log.info(f"Newest version: {newest_version_str}")
-    newest_version = semver.Version.parse(newest_version_str)
     current_version = semver.Version.parse(get_actionlint_version())
+    newest_release = get_next_release_link(links, current_version)
+    newest_release_link = newest_release[1]
+    newest_release_version_str = newest_release_link[0]
+    log.info(f"Newest version: {newest_release_version_str}")
+
+    newest_version = semver.Version.parse(newest_release_version_str)
     if newest_version.compare(current_version) != 1:
         log.info("Local version is newest, all good. Exiting.")
-        write_github_output(newest_version, newest_version_str, is_update_required=False)
+        write_github_output(newest_version, newest_release_version_str, is_update_required=False)
         exit(0)
-    checksum_file_content = get_checksum_file(newest_release_link)
-    update_config(checksum_file_content, str(current_version), newest_version_str)
-    update_actionlint_version(newest_version_str)
-    update_readme(str(current_version), newest_version_str)
+
+    checksum_file_content = get_checksum_file(newest_release_version_str)
+    update_config(checksum_file_content, str(current_version), newest_release_version_str)
+    update_actionlint_version(newest_release_version_str)
+    update_readme(str(current_version), newest_release_version_str)
     log.info("Local file 'checksums.cfg' and 'VERSION_ACTIONLINT.txt' and 'README.md' updated successfully. ")
     log.warning("A new commit is required.")
-    write_github_output(newest_version, newest_version_str, is_update_required=True)
+    write_github_output(newest_version, newest_release_version_str, is_update_required=True)
 
 
 if __name__ == "__main__":
