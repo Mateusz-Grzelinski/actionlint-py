@@ -15,7 +15,7 @@ jobs:
       update_required: ${{ steps.check-version.outputs.update_required }}
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
       - name: Set up Python
         id: set-up-python
         uses: actions/setup-python@v4
