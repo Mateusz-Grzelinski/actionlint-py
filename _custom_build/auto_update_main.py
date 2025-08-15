@@ -119,11 +119,11 @@ def get_checksums(checksum_file_content):
         )
 
 
-def write_github_output(newest_version, newest_version_str, is_update_required: bool):
+def write_github_output(newest_version, is_update_required: bool):
     if GITHUB_OUT is None:
         return
     with open(GITHUB_OUT, "a") as file:
-        file.write(f"version={newest_version_str}\n")
+        file.write(f"version={newest_version}\n")
         file.write(f"update_required={is_update_required}\n")
         file.write(f"release_url={ACTIONLINT_RELEASES}tag/v{newest_version}\n")
 
@@ -132,15 +132,16 @@ def main():
     links = get_release_page_links()
     current_version = semver.Version.parse(get_actionlint_version())
     newest_release = get_next_release_link(links, current_version)
+    if newest_release == None:
+        log.info("Local version is newest, all good. Exiting.")
+        write_github_output(current_version, is_update_required=False)
+        exit(0)
+
     newest_release_link = newest_release[1]
     newest_release_version_str = newest_release_link[0]
     log.info(f"Newest version: {newest_release_version_str}")
 
     newest_version = semver.Version.parse(newest_release_version_str)
-    if newest_version.compare(current_version) != 1:
-        log.info("Local version is newest, all good. Exiting.")
-        write_github_output(newest_version, newest_release_version_str, is_update_required=False)
-        exit(0)
 
     checksum_file_content = get_checksum_file(newest_release_version_str)
     update_config(checksum_file_content, str(current_version), newest_release_version_str)
@@ -148,7 +149,7 @@ def main():
     update_readme(str(current_version), newest_release_version_str)
     log.info("Local file 'checksums.cfg' and 'VERSION_ACTIONLINT.txt' and 'README.md' updated successfully. ")
     log.warning("A new commit is required.")
-    write_github_output(newest_version, newest_release_version_str, is_update_required=True)
+    write_github_output(newest_version, is_update_required=True)
 
 
 if __name__ == "__main__":
