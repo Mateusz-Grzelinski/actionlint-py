@@ -28,7 +28,13 @@ def get_release_page_links():
 
 
 def get_checksum_file(newest_release_link: str) -> str:
-    checksum_link = "https://github.com/rhysd/actionlint/releases/download/v" + newest_release_link + "/actionlint_" + newest_release_link + "_checksums.txt"
+    checksum_link = (
+        "https://github.com/rhysd/actionlint/releases/download/v"
+        + newest_release_link
+        + "/actionlint_"
+        + newest_release_link
+        + "_checksums.txt"
+    )
     checksums_file = requests.get(checksum_link)
     content = checksums_file.content.decode("utf-8")
     return content
@@ -45,7 +51,7 @@ def get_next_release_link(links: Iterable[str], current_version: semver.Version)
     versions_with_links = [(s.split("/")[-1].lstrip("v"), s) for s in all_versions]
     sorted_versions = sorted(
         versions_with_links,
-        key=lambda x: semver.VersionInfo.parse(x[0])
+        key=lambda x: semver.VersionInfo.parse(x[0]),
     )
     for v in sorted_versions:
         if current_version < semver.VersionInfo.parse(v[0]):
@@ -138,7 +144,7 @@ def main():
         exit(0)
 
     newest_release_link = newest_release[1]
-    newest_release_version_str = newest_release_link[0]
+    newest_release_version_str = newest_release[0]
     log.info(f"Newest version: {newest_release_version_str}")
 
     newest_version = semver.Version.parse(newest_release_version_str)
