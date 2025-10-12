@@ -70,9 +70,13 @@ jobs:
         id: get-version
         run: |
           echo "version=$(python ./_custom_build/version.py --release)" | tee "$GITHUB_OUTPUT"
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Push commit if needed
+        uses: stefanzweifel/git-auto-commit-action@v6
         with:
           commit_message: Increment build system version to ${{ steps.get-version.outputs.version }}
+      - name: Push tag only
+        uses: stefanzweifel/git-auto-commit-action@v6
+        with:
           tagging_message: v${{ steps.get-version.outputs.version }}
           create_git_tag_only: true
     outputs:
