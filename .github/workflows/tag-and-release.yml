@@ -74,6 +74,7 @@ jobs:
         with:
           commit_message: Increment build system version to ${{ steps.get-version.outputs.version }}
           tagging_message: v${{ steps.get-version.outputs.version }}
+          create_git_tag_only: true
     outputs:
       version: ${{ steps.get-version.outputs.version }}
 
