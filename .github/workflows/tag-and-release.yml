@@ -21,11 +21,11 @@ jobs:
     if: EndsWith(github.ref, 'main')
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: 'Get Previous tag'
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v4
         id: build_system_changed
         with:
           base: ${{ steps.previoustag.outputs.tag }}
@@ -40,7 +40,7 @@ jobs:
               - _custom_build/VERSION_ACTIONLINT.txt
             dev:
               - _custom_build/VERSION_DEV.txt
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v4
         id: changes
         with:
           base: ${{ steps.previoustag.outputs.tag }}
@@ -71,11 +71,11 @@ jobs:
         run: |
           echo "version=$(python ./_custom_build/version.py --release)" | tee "$GITHUB_OUTPUT"
       - name: Push commit if needed
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Increment build system version to ${{ steps.get-version.outputs.version }}
       - name: Push tag only
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           tagging_message: v${{ steps.get-version.outputs.version }}
           create_git_tag_only: true

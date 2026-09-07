@@ -2,25 +2,28 @@ name: Test (tox)
 
 on:
   pull_request:
+    # only PR to main
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   main-windows:
-    uses: asottile/workflows/.github/workflows/tox.yml@v1.0.0
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.11.1
     with:
-      env: '["py38"]'
+      env: '["py310"]'
       os: windows-latest
       wheel-tags: true
   main-macos:
-    uses: asottile/workflows/.github/workflows/tox.yml@v1.0.0
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.11.1
     with:
-      env: '["py38"]'
+      env: '["py310"]'
       os: macos-13
       wheel-tags: true
   # todo macos arm architecture is not tested
   # todo linux arm architecture is not tested
   main-linux:
-    uses: asottile/workflows/.github/workflows/tox.yml@v1.0.0
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.11.1
     with:
-      env: '["py38"]'
+      env: '["py310"]'
       os: ubuntu-latest
