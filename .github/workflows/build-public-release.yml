@@ -2,7 +2,7 @@
 name: Build public release
 on:
   push:
-    # only PR to main
+    # trigger only pushed tags
     tags:
       - v*
   workflow_dispatch:
