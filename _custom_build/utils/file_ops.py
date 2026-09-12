@@ -1,16 +1,52 @@
 import hashlib
 import http
+import http.client
 import io
 import os
 import stat
 import sys
 import tarfile
+import time
+import urllib.error
 import urllib.request
 import zipfile
 
 
 def download(url: str, sha256: str) -> bytes:
-    with urllib.request.urlopen(url) as resp:
+    attempts = 5
+    backoff_sec = 2
+    last_exc = None
+    for attempt in range(attempts):
+        try:
+            return _download(url, sha256)
+        except urllib.error.HTTPError as e:
+            if not (500 <= e.code < 600):
+                raise e  # any other than server error = panic
+            last_exc = e
+        except (
+            urllib.error.URLError,
+            http.client.HTTPException,
+            TimeoutError,
+            OSError,
+        ) as e:
+            last_exc = e
+
+        if attempt == attempts - 1:
+            break  # dont sleep when retries are exhausted
+
+        sleep_time = min(backoff_sec, 30)
+        print(f"Download retry {attempt}: sleep {sleep_time}: {url}")
+        time.sleep(sleep_time)
+        backoff_sec *= 2
+    # attempts exhausted, panic
+    if last_exc:
+        raise RuntimeError(f"download failed for {url}") from last_exc
+    else:
+        raise RuntimeError(f"download failed for {url}")
+
+
+def _download(url: str, sha256: str) -> bytes:
+    with urllib.request.urlopen(url, timeout=30) as resp:
         code = resp.getcode()
         if code != http.HTTPStatus.OK:
             raise ValueError(f"HTTP failure. Code: {code}")
