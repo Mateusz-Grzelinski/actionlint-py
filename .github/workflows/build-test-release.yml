@@ -3,8 +3,8 @@ name: Build test release
 on:
   pull_request:
     # only PR to main
-    branches:
-      - main
+#    branches:
+#      - main
   workflow_dispatch:
 
 jobs:
