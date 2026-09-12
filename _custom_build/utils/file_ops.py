@@ -1,8 +1,8 @@
 import hashlib
 import http
+import http.client
 import io
 import os
-import socket
 import stat
 import sys
 import tarfile
@@ -23,8 +23,16 @@ def download(url: str, sha256: str) -> bytes:
             if not (500 <= e.code < 600):
                 raise e  # any other than server error = panic
             last_exc = e
-        except (urllib.error.URLError, socket.timeout, OSError) as e:
+        except (
+            urllib.error.URLError,
+            http.client.HTTPException,
+            TimeoutError,
+            OSError,
+        ) as e:
             last_exc = e
+
+        if attempt == attempts - 1:
+            break  # dont sleep when retries are exhausted
 
         sleep_time = min(backoff_sec, 30)
         print(f"Download retry {attempt}: sleep {sleep_time}: {url}")
