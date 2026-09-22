@@ -20,8 +20,9 @@ def download(url: str, sha256: str) -> bytes:
         try:
             return _download(url, sha256)
         except urllib.error.HTTPError as e:
-            if not (500 <= e.code < 600):
+            if not (500 <= e.code < 600 or e.code in (408, 425, 429)):
                 raise e  # any other than server error = panic
+
             last_exc = e
         except (
             urllib.error.URLError,
