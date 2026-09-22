@@ -22,13 +22,13 @@ jobs:
       id-token: write
     steps:
       - name: Download package distributions
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: build
           path: dist/
       - name: Set up Python
         id: set-up-python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
           python-version: 3.8
       - run: |

@@ -2,7 +2,7 @@
 name: Build public release
 on:
   push:
-    # only PR to main
+    # trigger only pushed tags
     tags:
       - v*
   workflow_dispatch:
@@ -24,12 +24,12 @@ jobs:
       contents: write
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.tag }}
       - name: Set up Python
         id: set-up-python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
           python-version: 3.8
       - run: |
@@ -49,7 +49,7 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload package distributions
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build
           path: dist/
